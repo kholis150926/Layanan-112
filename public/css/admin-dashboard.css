@@ -1,0 +1,154 @@
+:root {
+    --navy: #0d2255;
+    --blue: #2563eb;
+}
+
+body {
+    background-color: #f1f4fa;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.text-navy { color: var(--navy); }
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background-color: var(--navy);
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    background-color: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.sidebar-link {
+    color: rgba(255,255,255,0.7);
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.sidebar-link.active {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.sidebar-footer {
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* MAIN */
+.main-content {
+    min-height: 100vh;
+}
+
+/* STAT CARDS */
+.stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.bg-blue-soft { background-color: #dbeafe; }
+.bg-warning-soft { background-color: #fef3c7; }
+.bg-success-soft { background-color: #d1fae5; }
+.bg-danger-soft { background-color: #fee2e2; }
+.bg-pink-soft { background-color: #fce7f3; }
+.bg-purple-soft { background-color: #ede9fe; }
+.bg-orange-soft { background-color: #ffedd5; }
+.bg-info-soft { background-color: #cffafe; }
+
+.text-pink { color: #db2777; }
+.text-purple { color: #7c3aed; }
+.text-orange { color: #ea580c; }
+
+/* CHART CARD */
+.chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+/* REPORT LIST */
+.report-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.badge.status-menunggu { background-color: #fef3c7; color: #b45309; }
+.badge.status-disetujui { background-color: #d1fae5; color: #047857; }
+.badge.status-ditolak { background-color: #fee2e2; color: #b91c1c; }
+
+/* KECAMATAN CARD */
+.kecamatan-card {
+    background-color: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.kecamatan-card:hover {
+    border-color: var(--blue);
+    background-color: #eff6ff;
+    transform: translateY(-2px);
+}
+
+.kecamatan-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.kecamatan-name {
+    color: #4b5563;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.text-orange { color: #ea580c; }

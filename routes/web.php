@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\StatistikController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +23,12 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 require __DIR__.'/auth.php';
+
+// Gabungkan semua route admin di sini
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/statistik', [StatistikController::class, 'index'])->name('admin.statistik');
+    
+    // BARIS TAMBAHAN UNTUK SIMPAN LAPORAN
+    Route::post('/laporan/store', [StatistikController::class, 'store'])->name('admin.laporan.store');
+});

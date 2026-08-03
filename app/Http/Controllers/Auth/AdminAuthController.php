@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
-    // 1. Nama method disesuaikan dengan camelCase (showLoginForm)
     public function showLoginForm()
     {
         return view('auth.admin-login');
@@ -16,18 +15,26 @@ class AdminAuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        // Mencoba login menggunakan kolom 'name' di database
-        if (Auth::attempt(['name' => $credentials['username'], 'password' => $credentials['password']])) {
+        $loginInput = $request->input('username');
+        
+        // Deteksi apakah yang diinput format Email atau Name/Username biasa
+        $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        $credentials = [
+            $fieldType => $loginInput,
+            'password' => $request->input('password'),
+        ];
+
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/admin/dashboard');
         }
 
-        // 3. Perbaikan typo method onlyInput()
         return back()->withErrors([
             'username' => 'Username atau password salah.',
         ])->onlyInput('username');
