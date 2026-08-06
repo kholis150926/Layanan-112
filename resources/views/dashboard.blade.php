@@ -267,9 +267,6 @@
             </div>
         </div>
     </div>
-<<<<<<< Updated upstream
-</x-app-layout>
-=======
 
     <!-- ===== Peta & Kecamatan ===== -->
     <div class="row g-4 mb-5">
@@ -466,5 +463,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 </body>
-</html>
->>>>>>> Stashed changes
+</html>/++
++
