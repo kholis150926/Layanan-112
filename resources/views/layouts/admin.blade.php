@@ -32,7 +32,6 @@
                     <i class="bi bi-grid-fill"></i> Dashboard
                 </a>
 
-                <!-- HASIL PERBAIKAN MENU STATISTIK ADA DI SINI -->
                 <a href="{{ route('admin.statistik') }}" class="nav-link sidebar-link {{ request()->routeIs('admin.statistik') ? 'active' : '' }}">
                     <i class="bi bi-bar-chart-fill"></i> Statistik
                 </a>
@@ -40,9 +39,12 @@
                 <a href="#" class="nav-link sidebar-link">
                     <i class="bi bi-file-earmark-text-fill"></i> Riwayat
                 </a>
-                <a href="#" class="nav-link sidebar-link">
+
+                <!-- UPDATE MENU KELOLA KONTEN DI SINI -->
+                <a href="{{ route('admin.berita.index') }}" class="nav-link sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                     <i class="bi bi-collection-fill"></i> Kelola Konten
                 </a>
+
                 <a href="#" class="nav-link sidebar-link">
                     <i class="bi bi-image-fill"></i> Galeri
                 </a>

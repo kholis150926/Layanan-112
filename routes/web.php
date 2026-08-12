@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminAuthController;
@@ -55,3 +56,20 @@ Route::get('/galeri', fn () => view('galeri'))->name('galeri');
 Route::get('/kritik-saran', fn () => view('kritik-saran'))->name('kritik-saran');
 Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
 Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
+
+Route::middleware('auth')->prefix('admin')->group(function () {
+    // Route yang sudah ada...
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/statistik', [StatistikController::class, 'index'])->name('admin.statistik');
+    Route::post('/laporan/store', [StatistikController::class, 'store'])->name('admin.laporan.store');
+
+    // CRUD Berita / Kelola Konten
+    Route::resource('berita', BeritaController::class)->names([
+        'index'   => 'admin.berita.index',
+        'create'  => 'admin.berita.create',
+        'store'   => 'admin.berita.store',
+        'edit'    => 'admin.berita.edit',
+        'update'  => 'admin.berita.update',
+        'destroy' => 'admin.berita.destroy',
+    ]);
+});

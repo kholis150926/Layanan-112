@@ -43,5 +43,17 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      # --- TAMBAHAN DI SINI (Setup Node & Build Vite) ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install NPM dependencies & Build Assets
+        run: |
+          npm ci
+          npm run build
+      # --------------------------------------------------
+
       - name: Execute tests
         run: php artisan test
