@@ -7,7 +7,6 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PetaLayananController;
 
 Route::get('/', function () {
@@ -73,3 +72,4 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         'destroy' => 'admin.berita.destroy',
     ]);
 });
+

@@ -45,7 +45,7 @@
                     <i class="bi bi-collection-fill"></i> Kelola Konten
                 </a>
 
-                <a href="#" class="nav-link sidebar-link">
+                <a href="{{ route('admin.galery.index') }}" class="nav-link sidebar-link {{ request()->routeIs('admin.galeri') ? 'active' : '' }}">
                     <i class="bi bi-image-fill"></i> Galeri
                 </a>
             </nav>
