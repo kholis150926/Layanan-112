@@ -44,9 +44,13 @@
                 <a href="{{ route('admin.berita.index') }}" class="nav-link sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                     <i class="bi bi-collection-fill"></i> Kelola Konten
                 </a>
+                
+                <a href="{{ route('admin.galery.index') }}" class="nav-link sidebar-link">
+                    <i class="bi bi-image-fill"></i> Galery
+                </a>
 
-                <a href="{{ route('admin.galery.index') }}" class="nav-link sidebar-link {{ request()->routeIs('admin.galeri') ? 'active' : '' }}">
-                    <i class="bi bi-image-fill"></i> Galeri
+                <a href="#" class="nav-link sidebar-link">
+                    <i class="bi bi-envelope-paper-fill"></i> Keritik & Saran
                 </a>
             </nav>
 

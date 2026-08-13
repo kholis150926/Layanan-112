@@ -10,11 +10,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- Panggil File CSS khusus tadi -->
+    <!-- Panggil File CSS Khusus -->
     <link rel="stylesheet" href="{{ asset('css/admin-auth.css') }}">
-    
-    <!-- Jika file CSS disimpan di resources/css/admin-auth.css (Vite), aktifkan baris bawah ini: -->
-    <!-- @vite(['resources/css/admin-auth.css']) -->
 </head>
 <body>
 
