@@ -15,6 +15,9 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         :root {
             --brand-blue: #2f6fed;
@@ -139,45 +142,124 @@
             font-size: 14px;
             color: #374151;
         }
+        /* ===== SweetAlert custom - Mitra 112 ===== */
+        .mitra-alert-popup {
+            border-radius: 24px !important;
+            padding: 2rem 1.5rem 1.8rem !important;
+        }
+
+        .mitra-alert-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #3b6df0, #274edc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.6rem;
+            box-shadow: 0 8px 20px rgba(47, 111, 237, 0.35);
+        }
+
+        .mitra-alert-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .mitra-alert-sub {
+            font-size: .85rem;
+            color: #9ca3af;
+            margin-bottom: 1.2rem;
+        }
+
+        .mitra-alert-detail {
+            background: #f4f6fb;
+            border-radius: 14px;
+            padding: .9rem 1rem;
+            text-align: left;
+        }
+
+        .mitra-alert-row {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .88rem;
+            color: #374151;
+            padding: .35rem 0;
+        }
+
+        .mitra-alert-row i {
+            color: #2f6fed;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .mitra-alert-btn {
+            background: var(--brand-blue);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            padding: .55rem 1.8rem;
+            font-size: .9rem;
+            margin-top: 1.2rem;
+        }
+
+        .mitra-alert-btn:hover {
+            opacity: .9;
+        }
     </style>
 </head>
 <body>
 
     {{-- ===== Navbar ===== disalin persis dari dashboard.blade.php / berita/index.blade.php --}}
-    <nav class="navbar navbar-expand-lg navbar-saat sticky-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('beranda') }}">
-                <span class="brand-icon"><i class="bi bi-shield-fill-check"></i></span>
-                <span>
-                    <span class="d-block brand-title">SAAT 112</span>
-                    <span class="d-block brand-sub">Kutai Timur</span>
-                </span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navSaat">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navSaat">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('beranda') ? 'active' : '' }}" href="{{ route('beranda') }}">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('berita.index') ? 'active' : '' }}" href="{{ route('berita.index') }}">Berita</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('laporan.index') ? 'active' : '' }}" href="{{ route('laporan.index') }}">Tentang</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('galeri') ? 'active' : '' }}" href="{{ route('galeri') }}">Galeri</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('kritik-saran') ? 'active' : '' }}" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
-                </ul>
-                {{-- <a href="#" class="admin-link me-3">Admin</a> --}}
+    <!-- ===== Navbar ===== -->
+<nav class="navbar navbar-expand-lg navbar-saat sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('beranda') }}">
+            <span class="brand-icon"><i class="bi bi-shield-fill-check"></i></span>
+            <span>
+                <span class="d-block brand-title">SAAT 112</span>
+                <span class="d-block brand-sub">Kutai Timur</span>
+            </span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navSaat">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navSaat">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('beranda') ? 'active' : '' }}" href="{{ route('beranda') }}">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('berita.index') ? 'active' : '' }}" href="{{ route('berita.index') }}">Berita</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('laporan.index') ? 'active' : '' }}" href="{{ route('laporan.index') }}">Tentang</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('galery') ? 'active' : '' }}" href="{{ route('galery') }}">Galeri</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('kritik-saran') ? 'active' : '' }}" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
+            </ul>
+
+            <!-- Tombol Login Admin di Kanan Atas -->
+            <div class="d-flex align-items-center mt-3 mt-lg-0">
+                <a href="{{ url('/admin/login') }}" class="btn btn-outline-primary rounded-pill px-3 py-1-5 d-flex align-items-center gap-2 fw-semibold btn-sm">
+                    <i class="bi bi-person-lock fs-6"></i>
+                    <span>Login Admin</span>
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <div class="container py-5">
 
         {{-- ===== Hero ===== --}}
         <div class="hero-card mb-5">
             <span class="badge-soft mb-3 d-inline-block">Tentang Layanan</span>
-            <h1>Kutim Siaga 112</h1>
+            <h1>Saat 112</h1>
             <p>
-                Kutim Siaga merupakan layanan gawat darurat Kabupaten Kutai Timur.
+                Saat 112 merupakan layanan gawat darurat Kabupaten Kutai Timur.
                 Segala bentuk penyalahgunaan layanan ini akan ditindak sesuai peraturan yang berlaku.
             </p>
         </div>
@@ -273,17 +355,22 @@
                 <div class="row g-3">
                     @php
                         $mitra112 = [
-                            ['nama' => 'Yudha Brama Jaya', 'logo' => 'damkar.png'],
-                            ['nama' => 'SAR Nasional', 'logo' => 'sar.png'],
-                            ['nama' => 'BPBD', 'logo' => 'bpbd.png'],
-                            ['nama' => 'Palang Merah Indonesia', 'logo' => 'pmi.png'],
-                            ['nama' => 'PLN', 'logo' => 'pln.png'],
-                            ['nama' => 'Polres Kutai Timur', 'logo' => 'polres.png'],
+                            ['nama' => 'Yudha Brama Jaya', 'logo' => 'damkar.png', 'telepon' => '(0549) 23113', 'alamat' => 'Dinas Pemadam Kebakaran dan Penyelamatan Kabupaten Kutai Timur, Jl. Pendidikan, Teluk Lingga, Kec. Sangatta Utara, Kutai Timur, Kalimantan Timur 75683.'],
+                            ['nama' => 'SAR Nasional', 'logo' => 'sar.png', 'telepon' => '115', 'alamat' => 'Pos SAR Sangatta, Jl. Aw. Syahrani / Jl. Pendidikan No. Km. 05, RT 22/RW 38, Sangatta Utara, Kec. Sangatta Utara, Kutai Timur, Kalimantan Timur.'],
+                            ['nama' => 'BPBD', 'logo' => 'bpbd.png', 'telepon' => '0813-4125-7909', 'alamat' => 'Jl. Soekarno Hatta No. 4G, Sangatta Utara, Kutai Timur, Kalimantan Timur 75683. Ini alamat yang tercantum dalam profil resmi BPBD Kutai Timur 2025'],
+                            ['nama' => 'Palang Merah Indonesia', 'logo' => 'pmi.png', 'telepon' => '0811-525-354', 'alamat' => 'Singa Gembara, Kec. Sangatta Utara, Kabupaten Kutai Timur, Kalimantan Timur 75683.'],
+                            ['nama' => 'PLN', 'logo' => 'pln.png', 'telepon' => '123', 'alamat' => 'Jl. Yos Sudarso IV, Swarga Bara, Kec. Sangatta Utara, Kabupaten Kutai Timur, Kalimantan Timur 75683.'],
+                            ['nama' => 'Polres Kutai Timur', 'logo' => 'polres.png', 'telepon' => '110', 'alamat' => 'Jl. Bhayangkara, Teluk Lingga, Kec. Sangatta Utara, Kabupaten Kutai Timur, Kalimantan Timur 75683.'],
                         ];
                     @endphp
                     @foreach($mitra112 as $mitra)
                         <div class="col-md-4 col-6">
-                            <div class="mitra-chip d-flex flex-column align-items-center justify-content-center text-center p-3">
+                            <div class="mitra-chip d-flex flex-column align-items-center justify-content-center text-center p-3"
+                                style="cursor: pointer;"
+                                onclick="showMitraDetail(this)"
+                                data-nama="{{ $mitra['nama'] }}"
+                                data-telepon="{{ $mitra['telepon'] }}"
+                                data-alamat="{{ $mitra['alamat'] }}">
                                 <img src="{{ asset('image/mitra/' . $mitra['logo']) }}" alt="{{ $mitra['nama'] }}" class="mitra-img">
                                 <span>{{ $mitra['nama'] }}</span>
                             </div>
@@ -295,7 +382,6 @@
 
     </div>
 
-    {{-- ===== Footer ===== ganti dengan @include('layouts.footer') kalau footer aslinya ada di partial terpisah --}}
     <footer class="footer-saat">
         <div class="container">
             <div class="footer-bottom">
@@ -303,6 +389,42 @@
             </div>
         </div>
     </footer>
+    <script>
+        function showMitraDetail(el) {
+            const nama = el.dataset.nama;
+            const telepon = el.dataset.telepon;
+            const alamat = el.dataset.alamat;
+
+            Swal.fire({
+                html: `
+                    <div class="mitra-alert-icon">
+                        <i class="bi bi-shield-fill-check"></i>
+                    </div>
+                    <h5 class="mitra-alert-title">${nama}</h5>
+                    <p class="mitra-alert-sub">Informasi kontak dan alamat mitra 112</p>
+
+                    <div class="mitra-alert-detail">
+                        <div class="mitra-alert-row">
+                            <i class="bi bi-telephone-fill"></i>
+                            <span>${telepon}</span>
+                        </div>
+                        <div class="mitra-alert-row">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>${alamat}</span>
+                        </div>
+                    </div>
+                `,
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup',
+                showCloseButton: true,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'mitra-alert-popup',
+                    confirmButton: 'mitra-alert-btn'
+                }
+            });
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
