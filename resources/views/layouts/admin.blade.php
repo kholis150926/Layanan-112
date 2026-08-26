@@ -49,7 +49,7 @@
                     <i class="bi bi-image-fill"></i> Galery
                 </a>
 
-                <a href="#" class="nav-link sidebar-link">
+                <a href="{{ route('admin.kritik-saran.riwayat') }}" class="nav-link sidebar-link">
                     <i class="bi bi-envelope-paper-fill"></i> Keritik & Saran
                 </a>
             </nav>
