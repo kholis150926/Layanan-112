@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PetaLayananController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\KritikSaranController;
 
 // Import Controller Admin
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
@@ -14,22 +15,28 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\GaleryController;
 use App\Http\Controllers\Admin\RiwayatController;
+use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranController;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes (Halaman Depan)
+| Public Routes (Halaman Depan - Bebas Diakses Tanpa Login)
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [DashboardController::class, 'index'])->name('beranda');
+
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 
-// Route Berita Public (Menggunakan AdminBeritaController)
+// Route Berita Public
 Route::get('/berita', [AdminBeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{slug}', [AdminBeritaController::class, 'show'])->name('berita.show');
 
 Route::get('/laporan', fn () => view('tentang.index'))->name('laporan.index');
 Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.create');
-Route::get('/kritik-saran', fn () => view('kritik-saran'))->name('kritik-saran');
+
+// Route Kritik & Saran Public (Disambungkan ke name 'kritik-saran' dan 'kritik-saran.index')
+Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran');
+Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
 
 // Route Galery Public
 Route::get('/galery', fn () => view('galery'))->name('galery');
@@ -38,15 +45,16 @@ Route::get('/galery', fn () => view('galery'))->name('galery');
 Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
 Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
 | Auth User & Admin Login
 |--------------------------------------------------------------------------
 */
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -54,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Admin Login
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
@@ -62,16 +71,18 @@ require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
-| Admin Panel Routes
+| Admin Panel Routes (Wajib Login / Auth)
 |--------------------------------------------------------------------------
 */
+
 Route::middleware('auth')->prefix('admin')->group(function () {
-    // Dashboard & Statistik
+
+    // Dashboard & Statistik Admin
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/statistik', [StatistikController::class, 'index'])->name('admin.statistik');
     Route::post('/laporan/store', [StatistikController::class, 'store'])->name('admin.laporan.store');
 
-    // CRUD Berita / Kelola Konten
+    // CRUD Berita Admin
     Route::resource('berita', AdminBeritaController::class)->names([
         'index'   => 'admin.berita.index',
         'create'  => 'admin.berita.create',
@@ -86,5 +97,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/galery', [GaleryController::class, 'store'])->name('admin.galery.store');
     Route::delete('/galery/{id}', [GaleryController::class, 'destroy'])->name('admin.galery.destroy');
 
+    // Riwayat Admin
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('admin.riwayat.index');
+
+    // Kritik & Saran Kelola Admin
+    Route::get('/kritik-saran', [AdminKritikSaranController::class, 'index'])->name('admin.kritik-saran.index');
+    Route::patch('/kritik-saran/{kritikSaran}/status', [AdminKritikSaranController::class, 'updateStatus'])->name('admin.kritik-saran.update-status');
+    Route::delete('/kritik-saran/{kritikSaran}', [AdminKritikSaranController::class, 'destroy'])->name('admin.kritik-saran.destroy');
 });
