@@ -86,13 +86,11 @@
         .news-read { font-size: .8rem; font-weight: 600; color: var(--brand-blue); }
 
         /* ===== Footer ===== */
-        .footer-saat { background: var(--brand-blue-dark); color: #cbd5e1; padding: 3rem 0 1rem; margin-top: 3rem; }
+        .footer-saat { background: #10182b; color: #cbd5e1; padding: 3rem 0 1rem; margin-top: 3rem; }
         .footer-saat h6 { color: #fff; font-weight: 700; }
         .footer-saat a { color: #9aa5b8; font-size: .88rem; }
         .footer-saat a:hover { color: #fff; }
         .footer-saat .footer-brand { display: flex; align-items: center; gap: .6rem; margin-bottom: .8rem; }
-        .footer-saat .footer-brand-title { font-weight: 700; color: #fff; font-size: 1rem; line-height: 1.1; }
-        .footer-saat .footer-brand-sub { font-size: .72rem; color: #9aa5b8; }
         .footer-saat p.small-text { font-size: .85rem; color: #9aa5b8; }
         .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); margin-top: 2rem; padding-top: 1.2rem; font-size: .78rem; color: #6b7280; text-align: center; }
         .footer-emergency-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-red); display: flex; align-items: center; justify-content: center; color: #fff; }
@@ -119,7 +117,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('profil') }}">Profil</a></li>
                 <li class="nav-item"><a class="nav-link active" href="{{ route('berita.index') }}">Berita</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('laporan.index') }}">Tentang</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('galeri') }}">Galeri</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('galery') }}">Galeri</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
             </ul>
             <div class="d-flex align-items-center gap-3">
@@ -218,15 +216,12 @@
             <div class="col-md-4">
                 <div class="footer-brand">
                     <span class="footer-emergency-icon"><i class="bi bi-shield-fill-check"></i></span>
-                    <span>
-                        <span class="d-block footer-brand-title">SAAT 112</span>
-                        <span class="d-block footer-brand-sub">Sistem Aplikasi Alerting Terpadu</span>
-                    </span>
+                    <h6 class="mb-0">SAAT 112</h6>
                 </div>
                 <p class="small-text">
                     Layanan darurat terpadu untuk masyarakat Kabupaten Kutai Timur, Kalimantan Timur.
                 </p>
-                <p class="small-text mb-0">Diskominfo Staper Kutim &copy; 2025</p>
+                <p class="small-text mb-0">&copy; Diskominfo Kabupaten Kutai Timur 2026</p>
             </div>
             <div class="col-md-4">
                 <h6>Navigasi Cepat</h6>
@@ -234,28 +229,32 @@
                     <li><a href="{{ route('beranda') }}">Beranda</a></li>
                     <li><a href="{{ route('profil') }}">Profil</a></li>
                     <li><a href="{{ route('berita.index') }}">Berita</a></li>
-                    <li><a href="{{ route('laporan.index') }}">Laporan</a></li>
-                    <li><a href="{{ route('galeri') }}">Galeri</a></li>
+                    <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
+                    <li><a href="{{ route('galery') }}">Galeri</a></li>
                     <li><a href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
                 <h6>Kontak Darurat</h6>
                 <div class="d-flex align-items-center gap-2 mt-3 mb-2">
-                    <span class="footer-emergency-icon" style="width:32px;height:32px;font-size:.85rem;">
-                        <i class="bi bi-telephone-fill"></i>
-                    </span>
+                    <i class="bi bi-telephone-fill text-danger"></i>
                     <div>
                         <div class="fw-semibold text-white">112</div>
                         <div class="small-text">Bebas Pulsa 24 Jam</div>
                     </div>
                 </div>
-                <div class="small-text mb-1">saat112@kutimkab.go.id</div>
-                <div class="small-text">Jl. Soekarno-Hatta, Sangatta</div>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span class="small-text">saat112@kutaitimurkab.go.id</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span class="small-text">Jl. Soekarno-Hatta, Sangatta</span>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            Dikelola oleh Dinas Komunikasi dan Informatika Statistik dan Persandian Kabupaten Kutai Timur
+            Diskominfo Kabupaten Kutai Timur &mdash; Sistem Informasi Darurat Kabupaten Kutai Timur
         </div>
     </div>
 </footer>

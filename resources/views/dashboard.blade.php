@@ -389,9 +389,9 @@
                         <li><a href="{{ route('beranda') }}">Beranda</a></li>
                         <li><a href="{{ route('profil') }}">Profil</a></li>
                         <li><a href="{{ route('berita.index') }}">Berita</a></li>
-                        <li><a href="{{ route('laporan.index') }}">Laporan</a></li>
+                        <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
                         <li><a href="{{ route('galery') }}">Galeri</a></li>
-                        <li><a href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
+                        <a href="{{ route('kritik-saran') }}">Kritik & Saran</a>
                     </ul>
                 </div>
                 <div class="col-md-4">

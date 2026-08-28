@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PetaLayananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KritikSaranController;
+use App\Http\Controllers\BeritaController;
 
 // Import Controller Admin
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 */
 
 Route::get('/', [DashboardController::class, 'index'])->name('beranda');
-use App\Http\Controllers\Admin\KritikSaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +39,11 @@ Route::get('/', function () {
 
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 
-// Route Berita Public
-Route::get('/berita', [AdminBeritaController::class, 'index'])->name('berita.index');
-Route::get('/berita/{slug}', [AdminBeritaController::class, 'show'])->name('berita.show');
+// Route Berita Public (Gunakan BeritaController, BUKAN AdminBeritaController)
+Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
+Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
 
+// Route Laporan (Sudah Benar)
 Route::get('/laporan', fn () => view('tentang.index'))->name('laporan.index');
 Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.create');
 
@@ -125,6 +126,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     // CRUD Kritik & Saran (Di dalam grup admin)
     Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('admin.kritik-saran.index');
+    Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
     Route::get('/kritik-saran/riwayat', [KritikSaranController::class, 'riwayat'])->name('admin.kritik-saran.riwayat');
     Route::patch('/kritik-saran/{id}/read', [KritikSaranController::class, 'markAsRead'])->name('admin.kritik-saran.read');
     Route::delete('/kritik-saran/{id}', [KritikSaranController::class, 'destroy'])->name('admin.kritik-saran.destroy');

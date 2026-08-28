@@ -115,6 +115,7 @@
         .footer-saat .footer-brand { display: flex; align-items: center; gap: .6rem; margin-bottom: .8rem; }
         .footer-saat p.small-text { font-size: .85rem; color: #9aa5b8; }
         .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); margin-top: 2rem; padding-top: 1.2rem; font-size: .78rem; color: #6b7280; text-align: center; }
+        .footer-emergency-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-red); display: flex; align-items: center; justify-content: center; color: #fff; }
 
         /* Ukuran logo dibuat lebih besar & proporsional */
         .mitra-img {
@@ -382,10 +383,52 @@
 
     </div>
 
+    <!-- ===== Footer ===== -->
     <footer class="footer-saat">
         <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="footer-brand">
+                        <span class="footer-emergency-icon"><i class="bi bi-shield-fill-check"></i></span>
+                        <h6 class="mb-0">SAAT 112</h6>
+                    </div>
+                    <p class="small-text">
+                        Layanan darurat terpadu untuk masyarakat Kabupaten Kutai Timur, Kalimantan Timur.
+                    </p>
+                    <p class="small-text mb-0">&copy; Diskominfo Kabupaten Kutai Timur 2026</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Navigasi Cepat</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 mt-3">
+                        <li><a href="{{ route('beranda') }}">Beranda</a></li>
+                        <li><a href="{{ route('profil') }}">Profil</a></li>
+                        <li><a href="{{ route('berita.index') }}">Berita</a></li>
+                        <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
+                        <li><a href="{{ route('galery') }}">Galeri</a></li>
+                        <a href="{{ route('kritik-saran') }}">Kritik & Saran</a>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Kontak Darurat</h6>
+                    <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+                        <i class="bi bi-telephone-fill text-danger"></i>
+                        <div>
+                            <div class="fw-semibold text-white">112</div>
+                            <div class="small-text">Bebas Pulsa 24 Jam</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-envelope-fill"></i>
+                        <span class="small-text">saat112@kutaitimurkab.go.id</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="small-text">Jl. Soekarno-Hatta, Sangatta</span>
+                    </div>
+                </div>
+            </div>
             <div class="footer-bottom">
-                &copy; {{ date('Y') }} SAAT 112 - Pemerintah Kabupaten Kutai Timur
+                Diskominfo Kabupaten Kutai Timur &mdash; Sistem Informasi Darurat Kabupaten Kutai Timur
             </div>
         </div>
     </footer>
