@@ -18,7 +18,7 @@
     <div class="d-flex">
 
         {{-- SIDEBAR --}}
-        <aside class="sidebar d-flex flex-column">
+        <aside class="sidebar d-flex flex-column" style="width: 260px; min-width: 260px; flex-shrink: 0;">
             <div class="sidebar-brand d-flex align-items-center gap-2 px-3 py-3">
                 <div class="brand-icon"><i class="bi bi-telephone-fill"></i></div>
                 <div>
@@ -36,7 +36,7 @@
                     <i class="bi bi-bar-chart-fill"></i> Statistik
                 </a>
 
-                <a href="#" class="nav-link sidebar-link">
+                <a href="{{ route('admin.riwayat.index') }}" class="nav-link sidebar-link">
                     <i class="bi bi-file-earmark-text-fill"></i> Riwayat
                 </a>
 

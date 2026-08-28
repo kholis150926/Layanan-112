@@ -8,39 +8,34 @@ use Illuminate\Http\Request;
 
 class KritikSaranController extends Controller
 {
-    /**
-     * Tampilkan riwayat seluruh pesan kritik & saran di panel admin.
-     */
     public function index()
     {
-        $pesanList = KritikSaran::latest()->paginate(15);
+        // PERBAIKAN DI SINI:
+        $pesanMasuk = KritikSaran::where('status', 'belum_dibaca')->latest()->get();
+        $totalAktif = $pesanMasuk->count();
 
-        return view('admin.kritik-saran.index', compact('pesanList'));
+        return view('Admin.kritik_saran.index', compact('pesanMasuk', 'totalAktif'));
     }
 
-    /**
-     * Update status pesan (menunggu / diproses / ditanggapi).
-     */
-    public function updateStatus(Request $request, KritikSaran $kritikSaran)
+    public function riwayat()
     {
-        $request->validate([
-            'status' => ['required', 'in:menunggu,diproses,ditanggapi'],
-        ]);
-
-        $kritikSaran->update([
-            'status' => $request->status,
-        ]);
-
-        return back()->with('success', 'Status pesan berhasil diperbarui.');
+        $riwayatPesan = KritikSaran::latest()->paginate(15);
+        return view('Admin.kritik_saran.riwayat', compact('riwayatPesan'));
     }
 
-    /**
-     * Hapus pesan kritik & saran.
-     */
-    public function destroy(KritikSaran $kritikSaran)
+    public function markAsRead($id)
     {
-        $kritikSaran->delete();
+        $pesan = KritikSaran::findOrFail($id);
+        $pesan->update(['status' => 'sudah_dibaca']);
 
-        return back()->with('success', 'Pesan berhasil dihapus.');
+        return redirect()->back()->with('success', 'pesan telah selasai dan dipindahkan keriwayat');
+    }
+
+    public function destroy($id)
+    {
+        $pesan = KritikSaran::findOrFail($id);
+        $pesan->delete();
+
+        return redirect()->back()->with('success', 'pesan telah terhapus');
     }
 }

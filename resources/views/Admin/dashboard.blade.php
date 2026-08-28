@@ -1,4 +1,4 @@
- @extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Dashboard')
 
@@ -8,34 +8,41 @@
     <h2 class="fw-bold text-navy mb-0">Dashboard</h2>
     <p class="text-muted mb-4">Ringkasan aktivitas layanan 112 Kutai Timur</p>
 
-    {{-- STAT CARDS --}}
+    {{-- STAT CARDS (4 KARTU BARU) --}}
     <div class="row g-3 mb-4">
+        {{-- Kartu 1: Total Kritik & Saran --}}
         <div class="col-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon bg-blue-soft text-primary"><i class="bi bi-file-earmark-text"></i></div>
-                <div class="stat-value">{{ $stats['total'] }}</div>
-                <div class="stat-label">Total Laporan</div>
+                <div class="stat-icon bg-blue-soft text-primary"><i class="bi bi-chat-left-text-fill"></i></div>
+                <div class="stat-value">{{ $stats['total_kritik'] ?? 0 }}</div>
+                <div class="stat-label">Total Kritik & Saran</div>
             </div>
         </div>
+
+        {{-- Kartu 2: Belum Dibaca / Menunggu --}}
         <div class="col-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon bg-warning-soft text-warning"><i class="bi bi-clock-fill"></i></div>
-                <div class="stat-value text-warning">{{ $stats['menunggu'] }}</div>
-                <div class="stat-label">Menunggu</div>
+                <div class="stat-icon bg-warning-soft text-warning"><i class="bi bi-envelope-exclamation-fill"></i></div>
+                <div class="stat-value text-warning">{{ $stats['belum_dibaca'] ?? 0 }}</div>
+                <div class="stat-label">Belum Dibaca</div>
             </div>
         </div>
+
+        {{-- Kartu 3: Sudah Dibaca / Direspon --}}
         <div class="col-6 col-lg-3">
             <div class="stat-card">
                 <div class="stat-icon bg-success-soft text-success"><i class="bi bi-check-circle-fill"></i></div>
-                <div class="stat-value text-success">{{ $stats['disetujui'] }}</div>
-                <div class="stat-label">Disetujui</div>
+                <div class="stat-value text-success">{{ $stats['sudah_dibaca'] ?? 0 }}</div>
+                <div class="stat-label">Sudah Dibaca</div>
             </div>
         </div>
+
+        {{-- Kartu 4: Total Galeri / Artikel --}}
         <div class="col-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon bg-danger-soft text-danger"><i class="bi bi-x-circle-fill"></i></div>
-                <div class="stat-value text-danger">{{ $stats['ditolak'] }}</div>
-                <div class="stat-label">Ditolak</div>
+                <div class="stat-icon bg-danger-soft text-danger"><i class="bi bi-images"></i></div>
+                <div class="stat-value text-danger">{{ $stats['total_galeri'] ?? 0 }}</div>
+                <div class="stat-label">Total Galeri</div>
             </div>
         </div>
     </div>
@@ -62,30 +69,6 @@
         <canvas id="chartKecamatan" height="70"></canvas>
     </div>
 
-    {{-- LAPORAN TERBARU --}}
-    <div class="chart-card">
-        <h5 class="fw-bold text-navy mb-3">Laporan Terbaru</h5>
-        <div class="list-group list-group-flush">
-            @foreach ($laporanTerbaru as $lp)
-                <div class="list-group-item d-flex align-items-center gap-3 px-0 py-3">
-                    <div class="report-icon bg-{{ $lp['color'] }}-soft text-{{ $lp['color'] }}">
-                        <i class="bi {{ $lp['icon'] }}"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold text-navy">
-                            {{ $lp['jenis'] }} <span class="text-muted small">{{ $lp['kode'] }}</span>
-                        </div>
-                        <div class="text-muted small">{{ $lp['lokasi'] }}</div>
-                    </div>
-                    <div class="text-end">
-                        <span class="badge status-{{ strtolower($lp['status']) }}">{{ $lp['status'] }}</span>
-                        <div class="text-muted small mt-1">{{ $lp['tanggal'] }}</div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-
 </div>
 @endsection
 
@@ -95,9 +78,9 @@
     new Chart(document.getElementById('chartTren'), {
         type: 'line',
         data: {
-            labels: @json($trenBulanan['labels']),
+            labels: @json($trenBulanan['labels'] ?? []),
             datasets: [{
-                data: @json($trenBulanan['data']),
+                data: @json($trenBulanan['data'] ?? []),
                 borderColor: '#2563eb',
                 backgroundColor: 'rgba(37, 99, 235, 0.1)',
                 fill: true,
@@ -111,14 +94,14 @@
         }
     });
 
-    // Kategori Laporan (donut chart)
+    // Kategori Laporan (doughnut chart)
     new Chart(document.getElementById('chartKategori'), {
         type: 'doughnut',
         data: {
-            labels: @json($kategori['labels']),
+            labels: @json($kategori['labels'] ?? []),
             datasets: [{
-                data: @json($kategori['data']),
-                backgroundColor: @json($kategori['colors']),
+                data: @json($kategori['data'] ?? []),
+                backgroundColor: @json($kategori['colors'] ?? []),
                 borderWidth: 0,
             }]
         },
@@ -132,9 +115,9 @@
     new Chart(document.getElementById('chartKecamatan'), {
         type: 'bar',
         data: {
-            labels: @json($kecamatan['labels']),
+            labels: @json($kecamatan['labels'] ?? []),
             datasets: [{
-                data: @json($kecamatan['data']),
+                data: @json($kecamatan['data'] ?? []),
                 backgroundColor: ['#dc2626', '#ea580c', '#2563eb', '#2563eb', '#2563eb', '#2563eb', '#2563eb', '#2563eb'],
                 borderRadius: 6,
                 maxBarThickness: 30,
