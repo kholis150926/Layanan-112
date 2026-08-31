@@ -4,11 +4,11 @@
 <div class="container-fluid p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark mb-1">Riwayat Seluruh Pesan</h2>
-            <p class="text-muted small mb-0">Arsip pesan yang sudah dibaca maupun yang terlewatkan</p>
+            <h2 class="fw-bold text-dark mb-1">Riwayat Kritik & Saran</h2>
+            <p class="text-muted small mb-0">Daftar semua masukan yang telah diterima</p>
         </div>
-        <a href="{{ route('admin.kritik-saran.index') }}" class="btn btn-dark rounded-3 px-3">
-            <i class="bi bi-arrow-left me-1"></i> Kembali ke Pesan Aktif
+        <a href="{{ route('admin.kritik-saran.index') }}" class="btn btn-outline-secondary rounded-3 px-3">
+            <i class="bi bi-arrow-left me-1"></i> Kembali ke Pesan Masuk
         </a>
     </div>
 
@@ -21,39 +21,53 @@
                             <th class="ps-4 py-3">Waktu</th>
                             <th>Pelapor</th>
                             <th>Kontak</th>
+                            <th>Jenis</th>
                             <th>Pesan</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($riwayatPesan as $item)
+                        <!-- PASTIKAN MENGGUNAKAN $kritikSaran -->
+                        @forelse($kritikSaran as $item)
                             <tr>
-                                <td class="ps-4 text-muted small">{{ $item->created_at->translatedFormat('d M Y, H:i') }}</td>
-                                <td class="fw-semibold text-dark">{{ $item->nama }}</td>
-                                <td class="text-muted small">{{ $item->no_hp }}</td>
+                                <td class="ps-4 text-muted small">
+                                    {{ $item->created_at ? $item->created_at->translatedFormat('d M Y, H:i') : '-' }}
+                                </td>
+                                <td class="fw-semibold text-dark">
+                                    {{ $item->is_anonymous ? 'Anonim' : ($item->pelapor ?? 'Tanpa Nama') }}
+                                </td>
+                                <td><span class="text-muted small">{{ $item->kontak ?? '-' }}</span></td>
+                                <td>
+                                    <span class="badge {{ $item->jenis == 'kritik' ? 'bg-danger' : 'bg-info' }} text-capitalize">
+                                        {{ $item->jenis ?? 'Saran' }}
+                                    </span>
+                                </td>
                                 <td class="text-truncate" style="max-width: 300px;">{{ $item->pesan }}</td>
                                 <td>
-                                    @if($item->status == 'sudah_dibaca')
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">Selesai/Dibaca</span>
-                                    @else
-                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3">Belum Dibaca</span>
-                                    @endif
+                                    <span class="badge {{ $item->status == 'sudah_dibaca' ? 'bg-success' : 'bg-warning' }} text-capitalize">
+                                        {{ str_replace('_', ' ', $item->status) }}
+                                    </span>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">Belum ada riwayat pesan.</td>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                                    Belum ada data riwayat kritik dan saran.
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
+            <!-- PASTIKAN PAGINATION MENGGUNAKAN $kritikSaran -->
+            @if($kritikSaran->hasPages())
+                <div class="card-footer bg-white border-0 py-3">
+                    {{ $kritikSaran->links() }}
+                </div>
+            @endif
         </div>
-        @if($riwayatPesan->hasPages())
-            <div class="card-footer bg-white border-0 py-3">
-                {{ $riwayatPesan->links() }}
-            </div>
-        @endif
     </div>
 </div>
 @endsection

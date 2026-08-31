@@ -12,13 +12,6 @@ class KritikSaranController extends Controller
         return view('kritik-saran.index');
     }
 
-    public function riwayat()
-    {
-        $kritikSaran = KritikSaran::latest()->get();
-
-        return view('admin.kritik-saran.riwayat', compact('kritikSaran'));
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -31,21 +24,13 @@ class KritikSaranController extends Controller
 
         $isAnonymous = $request->boolean('is_anonymous');
 
-        if ($isAnonymous) {
-            $pelapor = null;
-            $kontak = null;
-        } else {
-            $pelapor = $request->nama;
-            $kontak = $request->kontak;
-        }
-
         KritikSaran::create([
-            'pelapor'      => $pelapor,
-            'kontak'       => $kontak,
+            'pelapor'      => $isAnonymous ? null : $request->nama,
+            'kontak'       => $isAnonymous ? null : $request->kontak,
             'jenis'        => $validated['jenis'],
             'pesan'        => $validated['pesan'],
             'is_anonymous' => $isAnonymous,
-            'status'       => 'menunggu',
+            'status'       => 'belum_dibaca', // Disesuaikan dengan status pencarian di AdminController
         ]);
 
         return redirect()

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Import Controller Public
+// Import Controller Public (Pengguna Umum)
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PetaLayananController;
 use App\Http\Controllers\ProfileController;
@@ -20,47 +20,36 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes (Halaman Depan - Bebas Diakses Tanpa Login)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/', [DashboardController::class, 'index'])->name('beranda');
-
-/*
-|--------------------------------------------------------------------------
 | Public Routes (Halaman Depan Pengguna Umum)
 |--------------------------------------------------------------------------
 */
 
-// Akses 127.0.0.1:8000 langsung menampilkan Dashboard / Beranda Pengguna
 Route::get('/', function () {
     return view('dashboard');
 })->name('beranda');
 
-Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
-
-// Route Berita Public (Gunakan BeritaController, BUKAN AdminBeritaController)
-Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
-Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
-
-// Route Laporan (Sudah Benar)
-Route::get('/laporan', fn () => view('tentang.index'))->name('laporan.index');
-Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.create');
-
-// Route Kritik & Saran Public (Disambungkan ke name 'kritik-saran' dan 'kritik-saran.index')
-Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran');
-Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
-
-// Route Galery Public
-Route::get('/galery', fn () => view('galery'))->name('galery');
-
-// Route Peta Kutai Timur
-Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
-Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
+
+// Berita Public
+Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
+Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
+
+// Laporan Public
+Route::get('/laporan', fn () => view('tentang.index'))->name('laporan.index');
+Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.create');
+
+// Kritik & Saran Public (Form Pengiriman User)
+Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran');
+Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
+
+// Galery & Peta
+Route::get('/galery', fn () => view('galery'))->name('galery');
+Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
+Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
 
 
 /*
@@ -75,25 +64,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Login
+// Admin Auth
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
 require __DIR__.'/auth.php';
 
+
 /*
 |--------------------------------------------------------------------------
-| Admin Panel Routes (Wajib Login / Auth)
 | Admin Panel Routes (Hanya Bisa Diakses Setelah Login Admin)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth')->prefix('admin')->group(function () {
 
-    // Dashboard & Statistik Admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
-    // Dashboard Admin -> Akses: 127.0.0.1:8000/admin/dashboard
+    // Dashboard Admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/statistik', [StatistikController::class, 'index'])->name('admin.statistik');
     Route::post('/laporan/store', [StatistikController::class, 'store'])->name('admin.laporan.store');
@@ -108,26 +94,19 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         'destroy' => 'admin.berita.destroy',
     ]);
 
-    // CRUD Galery Admin
+    // Galery Admin
     Route::get('/galery', [GaleryController::class, 'index'])->name('admin.galery.index');
     Route::post('/galery', [GaleryController::class, 'store'])->name('admin.galery.store');
     Route::put('/galery/{id}', [GaleryController::class, 'update'])->name('admin.galery.update');
     Route::delete('/galery/{id}', [GaleryController::class, 'destroy'])->name('admin.galery.destroy');
 
-    // Riwayat Admin
+    // Riwayat Umum Admin
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('admin.riwayat.index');
 
-    // Kritik & Saran Kelola Admin
+    // Kelola Kritik & Saran (Menggunakan AdminKritikSaranController)
     Route::get('/kritik-saran', [AdminKritikSaranController::class, 'index'])->name('admin.kritik-saran.index');
-    Route::patch('/kritik-saran/{kritikSaran}/status', [AdminKritikSaranController::class, 'updateStatus'])->name('admin.kritik-saran.update-status');
-    Route::delete('/kritik-saran/{kritikSaran}', [AdminKritikSaranController::class, 'destroy'])->name('admin.kritik-saran.destroy');
-    // Riwayat
-    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('admin.riwayat.index');
+    Route::get('/kritik-saran/riwayat', [AdminKritikSaranController::class, 'riwayat'])->name('admin.kritik-saran.riwayat');
+    Route::patch('/kritik-saran/{id}/read', [AdminKritikSaranController::class, 'markAsRead'])->name('admin.kritik-saran.read');
+    Route::delete('/kritik-saran/{id}', [AdminKritikSaranController::class, 'destroy'])->name('admin.kritik-saran.destroy');
 
-    // CRUD Kritik & Saran (Di dalam grup admin)
-    Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('admin.kritik-saran.index');
-    Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
-    Route::get('/kritik-saran/riwayat', [KritikSaranController::class, 'riwayat'])->name('admin.kritik-saran.riwayat');
-    Route::patch('/kritik-saran/{id}/read', [KritikSaranController::class, 'markAsRead'])->name('admin.kritik-saran.read');
-    Route::delete('/kritik-saran/{id}', [KritikSaranController::class, 'destroy'])->name('admin.kritik-saran.destroy');
 });

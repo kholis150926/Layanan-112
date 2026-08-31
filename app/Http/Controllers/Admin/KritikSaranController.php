@@ -10,17 +10,18 @@ class KritikSaranController extends Controller
 {
     public function index()
     {
-        // PERBAIKAN DI SINI:
         $pesanMasuk = KritikSaran::where('status', 'belum_dibaca')->latest()->get();
         $totalAktif = $pesanMasuk->count();
 
-        return view('Admin.kritik_saran.index', compact('pesanMasuk', 'totalAktif'));
+        return view('Admin.Kritik_Saran.index', compact('pesanMasuk', 'totalAktif'));
     }
 
     public function riwayat()
     {
-        $riwayatPesan = KritikSaran::latest()->paginate(15);
-        return view('Admin.kritik_saran.riwayat', compact('riwayatPesan'));
+        // Variabel diubah menjadi $kritikSaran agar sesuai dengan @forelse($kritikSaran as $item) di Blade
+        $kritikSaran = KritikSaran::latest()->paginate(15);
+
+        return view('Admin.Kritik_Saran.riwayat', compact('kritikSaran'));
     }
 
     public function markAsRead($id)
@@ -28,7 +29,7 @@ class KritikSaranController extends Controller
         $pesan = KritikSaran::findOrFail($id);
         $pesan->update(['status' => 'sudah_dibaca']);
 
-        return redirect()->back()->with('success', 'pesan telah selasai dan dipindahkan keriwayat');
+        return redirect()->back()->with('success', 'Pesan telah selesai dan dipindahkan ke riwayat.');
     }
 
     public function destroy($id)
@@ -36,6 +37,6 @@ class KritikSaranController extends Controller
         $pesan = KritikSaran::findOrFail($id);
         $pesan->delete();
 
-        return redirect()->back()->with('success', 'pesan telah terhapus');
+        return redirect()->back()->with('success', 'Pesan telah terhapus.');
     }
 }

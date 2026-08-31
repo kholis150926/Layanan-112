@@ -28,7 +28,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="ps-4 py-3">Pelapor</th>
-                            <th>No. WhatsApp/HP</th>
+                            <th>Kontak (No. HP/WA)</th>
+                            <th>Jenis</th>
                             <th>Cuplikan Laporan</th>
                             <th>Waktu Masuk</th>
                             <th class="text-center">Aksi</th>
@@ -37,9 +38,16 @@
                     <tbody>
                         @forelse($pesanMasuk as $item)
                             <tr>
-                                <td class="ps-4 fw-bold text-dark">{{ $item->nama }}</td>
-                                <td><span class="text-muted small">{{ $item->no_hp }}</span></td>
-                                <td class="text-truncate" style="max-width: 280px;">{{ $item->pesan }}</td>
+                                <td class="ps-4 fw-bold text-dark">
+                                    {{ $item->is_anonymous ? 'Anonim' : ($item->pelapor ?? 'Tanpa Nama') }}
+                                </td>
+                                <td><span class="text-muted small">{{ $item->kontak ?? '-' }}</span></td>
+                                <td>
+                                    <span class="badge {{ $item->jenis == 'kritik' ? 'bg-danger' : 'bg-info' }} rounded-pill text-capitalize">
+                                        {{ $item->jenis ?? 'Saran' }}
+                                    </span>
+                                </td>
+                                <td class="text-truncate" style="max-width: 250px;">{{ $item->pesan }}</td>
                                 <td class="text-muted small">{{ $item->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-dark btn-sm px-3 rounded-3" data-bs-toggle="modal" data-bs-target="#modalStruk{{ $item->id }}">
@@ -59,7 +67,7 @@
                                             <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
                                         </div>
 
-                                        <!-- Body Struk (Gaya Nota/Struk Digital) -->
+                                        <!-- Body Struk -->
                                         <div class="modal-body p-4 bg-light">
                                             <div class="card border-0 shadow-sm rounded-3 p-3 bg-white mb-3">
                                                 <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
@@ -68,15 +76,17 @@
                                                 </div>
                                                 <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
                                                     <span class="text-muted small">Nama Pelapor</span>
-                                                    <span class="fw-semibold text-dark">{{ $item->nama }}</span>
+                                                    <span class="fw-semibold text-dark">
+                                                        {{ $item->is_anonymous ? 'Anonim' : ($item->pelapor ?? 'Tanpa Nama') }}
+                                                    </span>
                                                 </div>
                                                 <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                                                    <span class="text-muted small">No. HP / WhatsApp</span>
-                                                    <span class="fw-semibold text-dark">{{ $item->no_hp }}</span>
+                                                    <span class="text-muted small">Kontak</span>
+                                                    <span class="fw-semibold text-dark">{{ $item->kontak ?? '-' }}</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                                                    <span class="text-muted small">Email</span>
-                                                    <span class="fw-semibold text-dark">{{ $item->email ?? '-' }}</span>
+                                                    <span class="text-muted small">Jenis Pesan</span>
+                                                    <span class="fw-semibold text-capitalize text-dark">{{ $item->jenis ?? 'Saran' }}</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
                                                     <span class="text-muted small">Waktu Kirim</span>
@@ -113,7 +123,7 @@
                             </div>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">
+                                <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
                                     Tidak ada laporan baru. Semua laporan telah ditindaklanjuti!
                                 </td>

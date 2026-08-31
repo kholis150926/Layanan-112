@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kritik_sarans', function (Blueprint $table) {
-            $table->string('nama');
-            $table->string('email');
-            $table->string('no_hp');
+            $table->id(); // <<--- BARIS INI WAJIB ADA UNTUK POSTGRESQL
+            $table->string('pelapor')->nullable();
+            $table->string('kontak')->nullable();
+            $table->string('jenis')->default('saran');
             $table->text('pesan');
-            $table->enum('status', ['belum dibaca', 'sudah dibaca'])->default('belum dibaca');
+            $table->boolean('is_anonymous')->default(false);
+            $table->string('status')->default('belum_dibaca');
             $table->timestamps();
         });
     }

@@ -9,5 +9,5 @@ class KritikSaran extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'email', 'no_hp', 'pesan', 'status'];
+    protected $fillable = ['pelapor', 'kontak', 'jenis', 'pesan', 'status', 'is_anonymous'];
 }
