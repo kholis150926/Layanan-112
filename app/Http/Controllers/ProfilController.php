@@ -32,14 +32,6 @@ class ProfilController extends Controller
                 'desk'  => 'Penanganan bencana alam seperti banjir, longsor, angin puting beliung, dan lainnya.',
             ],
         ];
-
-        $capaian = [
-            ['num' => '1.240+', 'label' => 'Laporan Ditangani'],
-            ['num' => '< 8 mnt', 'label' => 'Rata-rata Respon'],
-            ['num' => '18', 'label' => 'Kecamatan Terjangkau'],
-            ['num' => '98%', 'label' => 'Tingkat Kepuasan'],
-        ];
-
-        return view('profil', compact('layananKami', 'capaian'));
+        return view('profil', compact('layananKami'));
     }
 }

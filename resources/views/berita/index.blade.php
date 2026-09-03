@@ -48,7 +48,6 @@
             color: #fff; font-weight: 600; background: var(--brand-blue);
             border-radius: 50px;
         }
-        .admin-link { color: #9ca3af; font-size: .88rem; }
 
         .page-title { color: #9ca3af; font-weight: 500; margin: 1.5rem 0 1rem; }
 
@@ -120,10 +119,6 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('galery') }}">Galeri</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
             </ul>
-            <div class="d-flex align-items-center gap-3">
-                {{-- Link Admin dinonaktifkan sementara, aktifkan lagi setelah route login siap --}}
-                {{-- <a href="{{ route('login') }}" class="admin-link">Admin</a> --}}
-            </div>
         </div>
     </div>
 </nav>
@@ -136,7 +131,7 @@
         <h4 class="mb-0">Berita & Informasi</h4>
         <div class="d-flex gap-2 flex-wrap">
             @php
-                $filterAktif = $filterAktif ?? 'Semua';
+                $filterAktif = request('kategori', 'Semua');
                 $filters = ['Semua', 'Pengumuman', 'Kegiatan', 'Statistik'];
             @endphp
             @foreach($filters as $filter)
@@ -148,65 +143,35 @@
         </div>
     </div>
 
-    <!-- ===== Grid Berita ===== -->
+    <!-- ===== Grid Berita (Dinamis Database) ===== -->
     <div class="row g-4 mb-5">
-        @php
-            $beritaList = $beritaList ?? [
-                [
-                    'badge' => 'Pengumuman', 'badge_class' => 'pengumuman',
-                    'gambar' => 'https://images.unsplash.com/photo-1521302080334-4bebac2763a6?w=500',
-                    'judul' => 'Pemprov Kaltim Perkuat Layanan Darurat 112 di Kutai Timur',
-                    'ringkasan' => 'Pemerintah Provinsi Kalimantan Timur berkomitmen memperkuat layanan darurat 112 untuk masyarakat Kutai...',
-                    'tanggal' => '22 Jan 2025',
-                    'slug' => 'pemprov-kaltim-perkuat-layanan-darurat-112',
-                ],
-                [
-                    'badge' => 'Kegiatan', 'badge_class' => 'kegiatan',
-                    'gambar' => 'https://images.unsplash.com/photo-1560439514-4e9645039924?w=500',
-                    'judul' => 'Sosialisasi Penggunaan Layanan 112 di Kecamatan Sangatta Utara',
-                    'ringkasan' => 'Tim Diskominfo Staper Kutim melaksanakan sosialisasi tentang cara penggunaan layanan darurat 112 kepada...',
-                    'tanggal' => '20 Jan 2025',
-                    'slug' => 'sosialisasi-penggunaan-layanan-112-sangatta-utara',
-                ],
-                [
-                    'badge' => 'Statistik', 'badge_class' => 'statistik',
-                    'gambar' => 'https://images.unsplash.com/photo-1541864890574-2c9fb28b30c7?w=500',
-                    'judul' => 'Layanan 112 Berhasil Tangani 50 Kasus Darurat di Januari 2025',
-                    'ringkasan' => 'Sepanjang Januari 2025, layanan 112 Kutai Timur berhasil menangani 50 kasus darurat yang terdiri dari ketertiban...',
-                    'tanggal' => '18 Jan 2025',
-                    'slug' => 'layanan-112-tangani-50-kasus-darurat-januari-2025',
-                ],
-                [
-                    'badge' => 'Kegiatan', 'badge_class' => 'kegiatan',
-                    'gambar' => 'https://images.unsplash.com/photo-1587979566642-fa79e3b48a4e?w=500',
-                    'judul' => 'Pelatihan Tim Respons Cepat Kabupaten Kutai Timur',
-                    'ringkasan' => 'Diskominfo Staper Kutim menggelar pelatihan intensif bagi tim respons cepat yang akan bertugas menanggapi laporan...',
-                    'tanggal' => '15 Jan 2025',
-                    'slug' => 'pelatihan-tim-respons-cepat-kutai-timur',
-                ],
-            ];
-        @endphp
-
-        @foreach($beritaList as $berita)
+        @forelse($beritaList as $berita)
             <div class="col-md-6 col-lg-4">
                 <div class="card news-card">
-                    <img src="{{ $berita['gambar'] }}" alt="{{ $berita['judul'] }}">
+                    <!-- Memanggil gambar_url dari database -->
+                    <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}">
                     <div class="card-body">
-                        <span class="news-badge {{ $berita['badge_class'] }}">{{ $berita['badge'] }}</span>
-                        <h6>{{ $berita['judul'] }}</h6>
-                        <p class="mb-0">{{ $berita['ringkasan'] }}</p>
+                        <!-- Badge Kategori -->
+                        <span class="news-badge {{ strtolower($berita->kategori ?? 'pengumuman') }}">
+                            {{ $berita->kategori ?? 'Pengumuman' }}
+                        </span>
+                        <h6>{{ $berita->judul }}</h6>
+                        <p class="mb-0">{{ Str::limit($berita->ringkasan ?? $berita->konten, 90) }}</p>
                         <div class="news-footer">
-                            <span class="news-date">{{ $berita['tanggal'] }}</span>
-                            <a href="{{ route('berita.show', $berita['slug']) }}" class="news-read">Baca &rarr;</a>
+                            <span class="news-date">
+                                {{ \Carbon\Carbon::parse($berita->created_at)->format('d M Y') }}
+                            </span>
+                            <a href="{{ route('berita.show', $berita->slug) }}" class="news-read">Baca &rarr;</a>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Belum ada berita yang dipublikasikan.</p>
+            </div>
+        @endforelse
     </div>
-
-    {{-- Contoh pagination, aktifkan kalau $beritaList berasal dari Eloquent paginate() --}}
-    {{-- <div class="d-flex justify-content-center mb-5">{{ $beritaList->links() }}</div> --}}
 </div>
 
 <!-- ===== Footer ===== -->

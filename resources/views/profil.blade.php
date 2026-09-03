@@ -191,10 +191,9 @@
 </nav>
 
 <div class="container">
-    <div class="page-title">Profil</div>
 
     <!-- ===== Intro ===== -->
-    <div class="intro-card mb-5">
+    <div class="intro-card mt-5 mb-5">
         <div class="intro-icon"><i class="bi bi-shield-fill-check"></i></div>
         <h2>Profil Layanan 112</h2>
         <p>
@@ -269,56 +268,41 @@
         @endforeach
     </div>
 
-    <!-- ===== Capaian Layanan ===== -->
-    <div class="capaian-card mb-5">
-        <h6>Capaian Layanan 2024</h6>
-        <div class="row g-3">
-            @php
-                $capaian = $capaian ?? [
-                    ['num' => '1.240+', 'label' => 'Laporan Ditangani'],
-                    ['num' => '< 8 mnt', 'label' => 'Rata-rata Respon'],
-                    ['num' => '18', 'label' => 'Kecamatan Terjangkau'],
-                    ['num' => '98%', 'label' => 'Tingkat Kepuasan'],
-                ];
-            @endphp
-            @foreach($capaian as $item)
-                <div class="col-6 col-md-3">
-                    <div class="capaian-stat">
-                        <div class="num">{{ $item['num'] }}</div>
-                        <div class="label">{{ $item['label'] }}</div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
 
-    <!-- ===== Kontak & Lokasi ===== -->
+<!-- ===== Kontak & Lokasi ===== -->
     <h5 class="section-title mb-3">Kontak & Lokasi</h5>
     <div class="row g-4 mb-5">
+        <!-- Telepon Darurat -->
         <div class="col-md-4">
-            <div class="kontak-card">
-                <div class="kontak-icon"><i class="bi bi-telephone-fill"></i></div>
-                <div>
-                    <div class="label">Telepon Darurat</div>
-                    <div class="value">112</div>
+            <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
+                <div class="kontak-icon mb-1">
+                    <i class="bi bi-telephone-fill"></i>
                 </div>
+                <div class="value fw-bold ">Telepon Darurat</div>
+                <div class="label text-muted small mt-3" style="font-size: 1rem;">112</div>
             </div>
         </div>
+
+        <!-- Email -->
         <div class="col-md-4">
-            <div class="kontak-card">
-                <div class="kontak-icon"><i class="bi bi-envelope-fill"></i></div>
-                <div>
-                    <div class="label">Email</div>
-                    <div class="value">saat112@kutaitimurkab.go.id</div>
+            <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
+                <div class="kontak-icon mb-0">
+                    <i class="bi bi-envelope-fill"></i>
                 </div>
+                <div class="value fw-bold  ">Email</div>
+                <div class="label text-muted small mt-3" style="font-size: 1rem;">112@kutaitimurkab.go.id</div>
             </div>
         </div>
+
+        <!-- Alamat -->
         <div class="col-md-4">
-            <div class="kontak-card">
-                <div class="kontak-icon"><i class="bi bi-geo-alt-fill"></i></div>
-                <div>
-                    <div class="label">Alamat</div>
-                    <div class="value">Jl. Soekarno-Hatta, Sangatta</div>
+            <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
+                <div class="kontak-icon mb-1">
+                    <i class="bi bi-geo-alt-fill" style="font-size: 40px;"></i>
+                </div>
+                <div class="value fw-bold ">Alamat</div>
+                <div class="label text-muted small" style="font-size: 0.85rem;">
+                    Jl. Prof. Dr. Sudiatmo, Kode Pos 75611, Dinas Komunikasi, Informatika, Statistik, dan Persandian Kabupaten Kutai Timur.
                 </div>
             </div>
         </div>

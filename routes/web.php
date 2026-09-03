@@ -24,9 +24,8 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('beranda');
+// Beranda (Mengambil data berita terbaru melalui BeritaController)
+Route::get('/', [BeritaController::class, 'beranda'])->name('beranda');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

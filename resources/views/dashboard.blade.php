@@ -320,52 +320,42 @@
             </div>
         </div>
 
-        <!-- ===== Berita Terbaru ===== -->
+<!-- ===== Berita Terbaru ===== -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="section-title mb-0">Berita Terbaru</h5>
             <a href="{{ route('berita.index') }}" class="lihat-semua">Lihat semua &rarr;</a>
         </div>
 
         <div class="row g-4 mb-4">
-            @php
-                $beritaList = $beritaList ?? [
-                    [
-                        'badge' => 'Pengumuman', 'badge_class' => 'pengumuman',
-                        'gambar' => 'https://images.unsplash.com/photo-1521302080334-4bebac2763a6?w=500',
-                        'judul' => 'Perupsov Kaltim Perluas Layanan Darurat 112 di Kutai Timur',
-                        'ringkasan' => 'Pemerintah Provinsi Kalimantan Timur bekerjasama mempercepat layanan darurat 112 untuk masyarakat Kutai Timur...',
-                        'tanggal' => '27 Jan 2026',
-                    ],
-                    [
-                        'badge' => 'Sosialisasi', 'badge_class' => 'sosialisasi',
-                        'gambar' => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=500',
-                        'judul' => 'Sosialisasi Penggunaan Layanan 112 di Kecamatan Sangatta Utara',
-                        'ringkasan' => 'Tim Diskominfo Kutai Timur melakukan sosialisasi tentang cara penggunaan layanan 112 kepada...',
-                        'tanggal' => '18 Jan 2026',
-                    ],
-                    [
-                        'badge' => 'Rilis', 'badge_class' => 'rilis',
-                        'gambar' => 'https://images.unsplash.com/photo-1541864890574-2c9fb28b30c7?w=500',
-                        'judul' => 'Layanan 112 Berhasil Tangani 50 Kasus Darurat di Bulan Januari 2024',
-                        'ringkasan' => 'Sepanjang Januari 2024, layanan 112 Kutai Timur berhasil menangani 50 kasus darurat yang timbul karena...',
-                        'tanggal' => '15 Jan 2026',
-                    ],
-                ];
-            @endphp
-
-            @foreach($beritaList as $berita)
+            @forelse($beritaTerbaru as $berita)
                 <div class="col-md-4">
                     <div class="card news-card">
-                        <img src="{{ $berita['gambar'] }}" class="card-img-top" alt="{{ $berita['judul'] }}">
+                        <img src="{{ $berita->gambar_url }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 180px; object-fit: cover;">
                         <div class="card-body">
-                            <span class="news-badge {{ $berita['badge_class'] }}">{{ $berita['badge'] }}</span>
-                            <h6>{{ $berita['judul'] }}</h6>
-                            <p class="mb-2">{{ $berita['ringkasan'] }}</p>
-                            <span class="news-date">{{ $berita['tanggal'] }}</span>
+                            <!-- Badge Kategori Dynamic -->
+                            <span class="news-badge {{ strtolower($berita->kategori) }}">
+                                {{ $berita->kategori }}
+                            </span>
+                            
+                            <h6 class="mt-2 text-truncate">{{ $berita->judul }}</h6>
+                            <p class="mb-2 text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                {{ $berita->ringkasan }}
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="news-date">
+                                    {{ \Carbon\Carbon::parse($berita->created_at)->format('d M Y') }}
+                                </span>
+                                <a href="{{ route('berita.show', $berita->slug) }}" class="text-primary fw-bold small">Baca &rarr;</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-center py-4 text-muted">
+                    <p class="mb-0">Belum ada berita terbaru saat ini.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 
@@ -470,5 +460,4 @@
     });
     </script>
     </body>
-    </html>/++
-    +
+    </html>
