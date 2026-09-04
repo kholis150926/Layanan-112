@@ -5,16 +5,16 @@ use Illuminate\Support\Facades\Route;
 // Import Controller Public (Pengguna Umum)
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PetaLayananController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KritikSaranController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\GaleriController;
 
 // Import Controller Admin
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\Admin\GaleryController;
+use App\Http\Controllers\Admin\GaleryController as AdminGaleryController;
 use App\Http\Controllers\Admin\RiwayatController;
 use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranController;
 
@@ -30,6 +30,8 @@ Route::get('/', [BeritaController::class, 'beranda'])->name('beranda');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+Route::get('/', fn () => view('dashboard'))->name('beranda');
+Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
 
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 
@@ -41,12 +43,14 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.sh
 Route::get('/laporan', fn () => view('tentang.index'))->name('laporan.index');
 Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.create');
 
-// Kritik & Saran Public (Form Pengiriman User)
+// Kritik & Saran Public
 Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran');
 Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
 
-// Galery & Peta
-Route::get('/galery', fn () => view('galery'))->name('galery');
+// Galery Public (Menggunakan GaleriController)
+Route::get('/galery', [GaleriController::class, 'index'])->name('galery');
+
+// Peta Kutai Timur
 Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
 Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
 
@@ -58,9 +62,9 @@ Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfilController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfilController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfilController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Admin Auth
@@ -94,15 +98,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     ]);
 
     // Galery Admin
-    Route::get('/galery', [GaleryController::class, 'index'])->name('admin.galery.index');
-    Route::post('/galery', [GaleryController::class, 'store'])->name('admin.galery.store');
-    Route::put('/galery/{id}', [GaleryController::class, 'update'])->name('admin.galery.update');
-    Route::delete('/galery/{id}', [GaleryController::class, 'destroy'])->name('admin.galery.destroy');
+    Route::get('/galery', [AdminGaleryController::class, 'index'])->name('admin.galery.index');
+    Route::post('/galery', [AdminGaleryController::class, 'store'])->name('admin.galery.store');
+    Route::put('/galery/{id}', [AdminGaleryController::class, 'update'])->name('admin.galery.update');
+    Route::delete('/galery/{id}', [AdminGaleryController::class, 'destroy'])->name('admin.galery.destroy');
 
     // Riwayat Umum Admin
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('admin.riwayat.index');
 
-    // Kelola Kritik & Saran (Menggunakan AdminKritikSaranController)
+    // Kelola Kritik & Saran
     Route::get('/kritik-saran', [AdminKritikSaranController::class, 'index'])->name('admin.kritik-saran.index');
     Route::get('/kritik-saran/riwayat', [AdminKritikSaranController::class, 'riwayat'])->name('admin.kritik-saran.riwayat');
     Route::patch('/kritik-saran/{id}/read', [AdminKritikSaranController::class, 'markAsRead'])->name('admin.kritik-saran.read');

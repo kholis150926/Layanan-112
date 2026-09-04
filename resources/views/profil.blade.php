@@ -285,10 +285,8 @@
 
         <!-- Email -->
         <div class="col-md-4">
-            <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
-                <div class="kontak-icon mb-0">
-                    <i class="bi bi-envelope-fill"></i>
-                </div>
+            <div class="kontak-card">
+                <div class="kontak-icon"><i class="bi bi-envelope-fill"></i></div>
                 <div class="value fw-bold  ">Email</div>
                 <div class="label text-muted small mt-3" style="font-size: 1rem;">112@kutaitimurkab.go.id</div>
             </div>
@@ -310,54 +308,74 @@
 </div>
 
 <!-- ===== Footer ===== -->
-<footer class="footer-saat">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="footer-brand">
-                    <span class="footer-emergency-icon"><i class="bi bi-shield-fill-check"></i></span>
-                    <h6 class="mb-0">SAAT 112</h6>
+<!-- ===== Footer ===== -->
+    <footer class="footer-saat">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="footer-brand">
+                        <span class="footer-emergency-icon"><i class="bi bi-shield-fill-check"></i></span>
+                        <h6 class="mb-0">SAAT 112</h6>
+                    </div>
+                    <p class="small-text">
+                        Layanan darurat terpadu untuk masyarakat Kabupaten Kutai Timur, Kalimantan Timur.
+                    </p>
+                    <p class="small-text mb-0">&copy; Diskominfo Kabupaten Kutai Timur 2026</p>
                 </div>
-                <p class="small-text">
-                    Layanan darurat terpadu untuk masyarakat Kabupaten Kutai Timur, Kalimantan Timur.
-                </p>
-                <p class="small-text mb-0">&copy; Diskominfo Kabupaten Kutai Timur 2026</p>
-            </div>
-            <div class="col-md-4">
-                <h6>Navigasi Cepat</h6>
-                <ul class="list-unstyled d-flex flex-column gap-2 mt-3">
-                    <li><a href="{{ route('beranda') }}">Beranda</a></li>
-                    <li><a href="{{ route('profil') }}">Profil</a></li>
-                    <li><a href="{{ route('berita.index') }}">Berita</a></li>
-                    <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
-                    <li><a href="{{ route('galery') }}">Galeri</a></li>
-                    <li><a href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <h6>Kontak Darurat</h6>
-                <div class="d-flex align-items-center gap-2 mt-3 mb-2">
-                    <i class="bi bi-telephone-fill text-danger"></i>
-                    <div>
-                        <div class="fw-semibold text-white">112</div>
-                        <div class="small-text">Bebas Pulsa 24 Jam</div>
+                <div class="col-md-3">
+                    <h6>Navigasi Cepat</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 mt-3">
+                        <li><a href="{{ route('beranda') }}">Beranda</a></li>
+                        <li><a href="{{ route('profil') }}">Profil</a></li>
+                        <li><a href="{{ route('berita.index') }}">Berita</a></li>
+                        <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
+                        <li><a href="{{ route('galery') }}">Galeri</a></li>
+                        <a href="{{ route('kritik-saran') }}">Kritik & Saran</a>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Kontak Darurat</h6>
+                    <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+                        <i class="bi bi-telephone-fill text-danger"></i>
+                        <div>
+                            <div class="fw-semibold text-white">112</div>
+                            <div class="small-text">Bebas Pulsa 24 Jam</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-envelope-fill"></i>
+                        <span class="small-text">112@kutaitimurkab.go.id</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span class="small-text">Jl. Soekarno-Hatta, Sangatta</span>
                     </div>
                 </div>
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <i class="bi bi-envelope-fill"></i>
-                    <span class="small-text">saat112@kutaitimurkab.go.id</span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    <span class="small-text">Jl. Soekarno-Hatta, Sangatta</span>
+                <div class="col-md-3">
+                    <h6>Media Sosial</h6>
+                    <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+                        <i class="bi bi-whatsapp"></i>
+                        <span class="small-text">081210007112</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-instagram"></i>
+                        <span class="small-text">@kutimsiaga112</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-telegram"></i>
+                        <span class="small-text">kutimsiaga112_bot</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-facebook"></i>
+                        <span class="small-text">kutimsiaga112</span>
+                    </div>
                 </div>
             </div>
+            <div class="footer-bottom">
+                Diskominfo Kabupaten Kutai Timur &mdash; Sistem Informasi Darurat Kabupaten Kutai Timur
+            </div>
         </div>
-        <div class="footer-bottom">
-            Diskominfo Kabupaten Kutai Timur &mdash; Sistem Informasi Darurat Kabupaten Kutai Timur
-        </div>
-    </div>
-</footer>
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

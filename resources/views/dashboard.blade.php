@@ -49,7 +49,12 @@
             .navbar-saat .nav-link {
                 color: #374151; font-weight: 500; font-size: .92rem; padding: .4rem .9rem;
             }
-            .navbar-saat .nav-link.active { color: var(--brand-blue); font-weight: 600; }
+            .navbar-saat .nav-link.active {
+                color: #fff;
+                font-weight: 600;
+                background: var(--brand-blue);
+                border-radius: 50px;
+            }
             .btn-darurat-nav {
                 background: var(--brand-red);
                 color: #fff; font-weight: 600; font-size: .88rem;
@@ -222,12 +227,6 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('galery') ? 'active' : '' }}" href="{{ route('galery') }}">Galeri</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('kritik-saran') ? 'active' : '' }}" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
                 </ul>
-
-            <!-- TOMBOL LOGIN ADMIN (Pojok Kanan) -->
-                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                <a href="{{ route('admin.login') }}" class="btn btn-outline-primary rounded-pill px-3 py-1-5 fw-semibold style-login-admin" style="font-size: 0.88rem;">
-                    <i class="bi bi-person-lock me-1"></i> Login Admin
-                </a>
             </div>
         </div>
     </nav>
@@ -247,7 +246,7 @@
                         Laporkan kejadian darurat di Kutai Timur. Bantuan siap menjangkau anda
                         dengan cepat untuk keselamatan anda.
                     </p>
-                    <a href="{{ route('profil') }}" class="btn btn-hero">
+                    <a href="{{ route('laporan.index') }}" class="btn btn-hero">
                         Tentang Layanan <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
@@ -363,7 +362,7 @@
     <footer class="footer-saat">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="footer-brand">
                         <span class="footer-emergency-icon"><i class="bi bi-shield-fill-check"></i></span>
                         <h6 class="mb-0">SAAT 112</h6>
@@ -373,7 +372,7 @@
                     </p>
                     <p class="small-text mb-0">&copy; Diskominfo Kabupaten Kutai Timur 2026</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h6>Navigasi Cepat</h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 mt-3">
                         <li><a href="{{ route('beranda') }}">Beranda</a></li>
@@ -384,7 +383,7 @@
                         <a href="{{ route('kritik-saran') }}">Kritik & Saran</a>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h6>Kontak Darurat</h6>
                     <div class="d-flex align-items-center gap-2 mt-3 mb-2">
                         <i class="bi bi-telephone-fill text-danger"></i>
@@ -395,11 +394,30 @@
                     </div>
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <i class="bi bi-envelope-fill"></i>
-                        <span class="small-text">saat112@kutaitimurkab.go.id</span>
+                        <span class="small-text">112@kutaitimurkab.go.id</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-geo-alt-fill"></i>
                         <span class="small-text">Jl. Soekarno-Hatta, Sangatta</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h6>Media Sosial</h6>
+                    <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+                        <i class="bi bi-whatsapp"></i>
+                        <span class="small-text">081210007112</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-instagram"></i>
+                        <span class="small-text">@kutimsiaga112</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-telegram"></i>
+                        <span class="small-text">kutimsiaga112_bot</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-facebook"></i>
+                        <span class="small-text">kutimsiaga112</span>
                     </div>
                 </div>
             </div>

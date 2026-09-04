@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berita & Informasi - SAAT 112</title>
+    <title>Galeri - SAAT 112</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -50,44 +50,73 @@
             background: var(--brand-blue);
             border-radius: 50px;
         }
+        .btn-darurat-nav {
+            background: var(--brand-red);
+            color: #fff; font-weight: 600; font-size: .88rem;
+            border-radius: 50px; padding: .5rem 1.2rem;
+            border: none;
+        }
+        .btn-darurat-nav:hover { color: #fff; opacity: .92; }
+        .admin-link { color: #9ca3af; font-size: .88rem; }
 
         .page-title { color: #9ca3af; font-weight: 500; margin: 1.5rem 0 1rem; }
 
-        /* ===== Header Berita ===== */
-        .berita-header h4 { font-weight: 700; color: #111827; }
+        /* ===== Header ===== */
+        .ks-header { text-align: center; margin-bottom: 2rem; }
+        .ks-header h2 { color: var(--brand-blue); font-weight: 700; font-size: 1.6rem; }
+        .ks-header p { color: #6b7280; font-size: .9rem; max-width: 520px; margin: .4rem auto 0; }
 
-        .filter-pill {
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            color: #374151;
-            font-size: .85rem;
-            font-weight: 500;
-            padding: .45rem 1.1rem;
-            border-radius: 50px;
+        /* ===== Galeri Card Styles ===== */
+        .galeri-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 2px 14px rgba(0,0,0,.04);
+            transition: all 0.25s ease;
         }
-        .filter-pill.active {
-            background: var(--brand-blue);
-            border-color: var(--brand-blue);
-            color: #fff;
-        }
-        .filter-pill:hover { color: inherit; text-decoration: none; }
 
-        /* ===== Berita Cards ===== */
-        .news-card { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); height: 100%; }
-        .news-card img { height: 170px; object-fit: cover; width: 100%; }
-        .news-card .card-body { padding: 1.1rem; }
-        .news-badge { font-size: .68rem; font-weight: 600; padding: .3rem .7rem; border-radius: 50px; text-transform: uppercase; letter-spacing: .02em; }
-        .news-badge.pengumuman { background: #e0edff; color: var(--brand-blue); }
-        .news-badge.kegiatan { background: #e5f7ec; color: #16a34a; }
-        .news-badge.statistik { background: #fde8e8; color: var(--brand-red); }
-        .news-card h6 { font-weight: 700; margin-top: .7rem; font-size: .95rem; line-height: 1.35; }
-        .news-card p { font-size: .82rem; color: #6b7280; }
-        .news-footer { display: flex; align-items: center; justify-content: space-between; margin-top: .6rem; }
-        .news-date { font-size: .75rem; color: #9ca3af; }
-        .news-read { font-size: .8rem; font-weight: 600; color: var(--brand-blue); }
+        .galeri-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .galeri-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .galeri-body {
+            padding: 16px;
+        }
+
+        .galeri-title {
+            color: #111827;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .galeri-date {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+
+        .galeri-empty {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            color: #888;
+            text-align: center;
+            box-shadow: 0 2px 14px rgba(0,0,0,.04);
+        }
 
         /* ===== Footer ===== */
-        .footer-saat { background: #10182b; color: #cbd5e1; padding: 3rem 0 1rem; margin-top: 3rem; }
+        .footer-saat { background: #10182b; color: #cbd5e1; padding: 3rem 0 1rem; margin-top: 9rem; }
         .footer-saat h6 { color: #fff; font-weight: 700; }
         .footer-saat a { color: #9aa5b8; font-size: .88rem; }
         .footer-saat a:hover { color: #fff; }
@@ -116,9 +145,9 @@
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('beranda') }}">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('profil') }}">Profil</a></li>
-                <li class="nav-item"><a class="nav-link active" href="{{ route('berita.index') }}">Berita</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('berita.index') }}">Berita</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('laporan.index') }}">Tentang</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('galery') }}">Galeri</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ route('galery') }}">Galeri</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
             </ul>
         </div>
@@ -126,56 +155,50 @@
 </nav>
 
 <div class="container">
-    <div class="page-title">Berita</div>
+    <div class="page-title">Galeri</div>
 
-    <!-- ===== Header + Filter ===== -->
-    <div class="berita-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <h4 class="mb-0">Berita & Informasi</h4>
-        <div class="d-flex gap-2 flex-wrap">
-            @php
-                $filterAktif = request('kategori', 'Semua');
-                $filters = ['Semua', 'Pengumuman', 'Kegiatan', 'Statistik'];
-            @endphp
-            @foreach($filters as $filter)
-                <a href="{{ route('berita.index', $filter === 'Semua' ? [] : ['kategori' => $filter]) }}"
-                   class="filter-pill {{ $filterAktif === $filter ? 'active' : '' }}">
-                    {{ $filter }}
-                </a>
-            @endforeach
-        </div>
+    <!-- ===== Header ===== -->
+    <div class="ks-header">
+        <h2>Galeri Kegiatan</h2>
+        <p>Dokumentasi kegiatan dan operasi layanan 112 Kutai Timur.</p>
     </div>
 
-    <!-- ===== Grid Berita (Dinamis Database) ===== -->
+    <!-- ===== Content Galeri ===== -->
     <div class="row g-4 mb-5">
-        @forelse($beritaList as $berita)
-            <div class="col-md-6 col-lg-4">
-                <div class="card news-card">
-                    <!-- Memanggil gambar_url dari database -->
-                    <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}">
-                    <div class="card-body">
-                        <!-- Badge Kategori -->
-                        <span class="news-badge {{ strtolower($berita->kategori ?? 'pengumuman') }}">
-                            {{ $berita->kategori ?? 'Pengumuman' }}
-                        </span>
-                        <h6>{{ $berita->judul }}</h6>
-                        <p class="mb-0">{{ Str::limit($berita->ringkasan ?? $berita->konten, 90) }}</p>
-                        <div class="news-footer">
-                            <span class="news-date">
-                                {{ \Carbon\Carbon::parse($berita->created_at)->format('d M Y') }}
-                            </span>
-                            <a href="{{ route('berita.show', $berita->slug) }}" class="news-read">Baca &rarr;</a>
-                        </div>
+        @forelse ($galeries as $galeri)
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="galeri-card">
+                    <img
+                        src="{{ asset('storage/' . $galeri->gambar) }}"
+                        alt="{{ $galeri->judul }}"
+                        class="galeri-image"
+                    >
+                    <div class="galeri-body">
+                        <h5 class="galeri-title">{{ $galeri->judul }}</h5>
+                        <p class="galeri-date">
+                            {{ \Carbon\Carbon::parse($galeri->tanggal)->format('d M Y') }}
+                        </p>
                     </div>
                 </div>
             </div>
         @empty
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">Belum ada berita yang dipublikasikan.</p>
+            <div class="col-12">
+                <div class="galeri-empty">
+                    Belum ada dokumentasi kegiatan yang ditambahkan.
+                </div>
             </div>
         @endforelse
     </div>
+
+    <!-- ===== Pagination ===== -->
+    @if (isset($galeries) && $galeries instanceof \Illuminate\Pagination\AbstractPaginator)
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $galeries->links() }}
+        </div>
+    @endif
 </div>
 
+<!-- ===== Footer ===== -->
 <!-- ===== Footer ===== -->
     <footer class="footer-saat">
         <div class="container">
