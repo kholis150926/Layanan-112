@@ -276,7 +276,7 @@
         <div class="col-md-4">
             <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
                 <div class="kontak-icon mb-1">
-                    <i class="bi bi-telephone-fill"></i>
+                    <i class="bi bi-telephone-fill" style="font-size: 25px"></i>
                 </div>
                 <div class="value fw-bold ">Telepon Darurat</div>
                 <div class="label text-muted small mt-3" style="font-size: 1rem;">112</div>
@@ -285,9 +285,10 @@
 
         <!-- Email -->
         <div class="col-md-4">
-            <div class="kontak-card">
-                <div class="kontak-icon"><i class="bi bi-envelope-fill"></i></div>
-                <div class="value fw-bold  ">Email</div>
+            <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
+                <div class="kontak-icon">
+                    <i class="bi bi-envelope-fill" style="font-size: 25px"></i></div>
+                <div class="value fw-bold"  >Email</div>
                 <div class="label text-muted small mt-3" style="font-size: 1rem;">112@kutaitimurkab.go.id</div>
             </div>
         </div>
@@ -296,7 +297,7 @@
         <div class="col-md-4">
             <div class="kontak-card d-flex flex-column align-items-center text-center p-4 h-100">
                 <div class="kontak-icon mb-1">
-                    <i class="bi bi-geo-alt-fill" style="font-size: 40px;"></i>
+                    <i class="bi bi-geo-alt-fill" style="font-size: 30px;"></i>
                 </div>
                 <div class="value fw-bold ">Alamat</div>
                 <div class="label text-muted small" style="font-size: 0.85rem;">

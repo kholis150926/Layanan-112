@@ -13,7 +13,7 @@ class AdminAuthController extends Controller
         return view('auth.admin-login');
     }
 
-    public function login(Request $request)
+        public function login(Request $request)
     {
         $request->validate([
             'username' => 'required|string',
@@ -21,16 +21,14 @@ class AdminAuthController extends Controller
         ]);
 
         $loginInput = $request->input('username');
-        
-        // Deteksi apakah yang diinput format Email atau Name/Username biasa
+        $password = $request->input('password');
+
+        // Cek login via Email, Name, atau Username
         $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
-        $credentials = [
-            $fieldType => $loginInput,
-            'password' => $request->input('password'),
-        ];
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt([$fieldType => $loginInput, 'password' => $password]) || 
+            Auth::attempt(['username' => $loginInput, 'password' => $password])) {
+            
             $request->session()->regenerate();
             return redirect()->intended('/admin/dashboard');
         }

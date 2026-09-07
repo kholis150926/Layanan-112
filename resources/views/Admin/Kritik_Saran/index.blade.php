@@ -101,20 +101,12 @@
                                         </div>
 
                                         <!-- Footer Action -->
-                                        <div class="modal-footer bg-white border-0 p-3 d-flex justify-content-between">
-                                            <form action="{{ route('admin.kritik-saran.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus laporan ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger rounded-3 btn-sm">
-                                                    <i class="bi bi-trash"></i> Hapus
-                                                </button>
-                                            </form>
-                                            
-                                            <form action="{{ route('admin.kritik-saran.read', $item->id) }}" method="POST">
+                                        <div class="modal-footer bg-white border-0 p-3 justify-content-center">
+                                            <form action="{{ route('admin.kritik-saran.read', $item->id) }}" method="POST" class="w-100 text-center">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-success rounded-3 fw-medium btn-sm">
-                                                    <i class="bi bi-check2-circle me-1"></i> Tandai Selesai & Pindahkan
+                                                <button type="submit" class="btn btn-success rounded-3 fw-medium btn-sm px-4">
+                                                    <i class="bi bi-check2-circle me-1"></i> Selesai 
                                                 </button>
                                             </form>
                                         </div>

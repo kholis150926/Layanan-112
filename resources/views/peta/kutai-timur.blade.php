@@ -86,21 +86,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const statusColor = {
-        launching:  '#2e9e4f',
-        uji_coba:   '#f39c12',
-        verifikasi: '#2b7fd6',
-        pengajuan:  '#5bc0c0',
-        belum:      '#8c8c8c',
-    };
-    const statusLabel = {
-        launching: 'Sudah Launching',
-        uji_coba: 'Uji Coba',
-        verifikasi: 'Verifikasi',
-        pengajuan: 'Dalam Pengajuan',
-        belum: 'Belum Permohonan',
-    };
-
+    
     const map = L.map('map').setView([1.35, 117.4], 9);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

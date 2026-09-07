@@ -12,51 +12,45 @@ class GaleryController extends Controller
     public function index()
     {
         $galeris = Galery::latest()->get();
-        return view('Admin.galery.index', compact('galeris'));
+        return view('admin.galery.index', compact('galeris'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'judul'   => 'required|string|max:255',
+            'gambar'  => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'tanggal' => 'required|date',
         ]);
 
-        $fotoPath = $request->file('foto')->store('galeri', 'public');
+        $gambarPath = $request->file('gambar')->store('galery', 'public');
 
         Galery::create([
-            'judul' => $request->judul,
-            'foto' => $fotoPath,
+            'judul'   => $request->judul,
+            'gambar'  => $gambarPath,
             'tanggal' => $request->tanggal,
         ]);
 
         return redirect()->back()->with('success', 'Foto berhasil ditambahkan!');
     }
 
-    // Method untuk memproses update/edit data galeri
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
+            'judul'   => 'required|string|max:255',
             'tanggal' => 'required|date',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // foto opsional saat edit
+            'gambar'  => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $galeri = Galery::findOrFail($id);
-
-        $galeri->judul = $request->judul;
+        $galeri->judul   = $request->judul;
         $galeri->tanggal = $request->tanggal;
 
-        // Jika user mengunggah foto pengganti baru
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama dari penyimpanan jika ada
-            if ($galeri->foto && Storage::disk('public')->exists($galeri->foto)) {
-                Storage::disk('public')->delete($galeri->foto);
+        if ($request->hasFile('gambar')) {
+            if ($galeri->gambar && Storage::disk('public')->exists($galeri->gambar)) {
+                Storage::disk('public')->delete($galeri->gambar);
             }
-
-            // Simpan foto baru
-            $galeri->foto = $request->file('foto')->store('galeri', 'public');
+            $galeri->gambar = $request->file('gambar')->store('galery', 'public');
         }
 
         $galeri->save();
@@ -67,13 +61,13 @@ class GaleryController extends Controller
     public function destroy($id)
     {
         $galeri = Galery::findOrFail($id);
-        
-        if ($galeri->foto && Storage::disk('public')->exists($galeri->foto)) {
-            Storage::disk('public')->delete($galeri->foto);
+
+        if ($galeri->gambar && Storage::disk('public')->exists($galeri->gambar)) {
+            Storage::disk('public')->delete($galeri->gambar);
         }
 
         $galeri->delete();
 
         return redirect()->back()->with('success', 'Foto berhasil dihapus!');
     }
-}   
+}

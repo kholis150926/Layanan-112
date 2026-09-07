@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
 use App\Models\KritikSaran; // Membaca tabel 'kritik_sarans'
-use App\Models\Galery;      // Membaca tabel 'galeries'
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -22,7 +21,8 @@ class DashboardController extends Controller
             'belum_dibaca' => KritikSaran::where('status', 'belum_dibaca')->count(),
             'sudah_dibaca' => KritikSaran::where('status', 'sudah_dibaca')->count(),
 
-            'total_galeri' => Galery::count(),
+            // Diubah dari total_galery menjadi total_laporan
+            'total_laporan' => Laporan::count(),
         ];
 
         // 2. TREN LAPORAN BULANAN (6 Bulan Terakhir)

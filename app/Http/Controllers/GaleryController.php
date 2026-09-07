@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Galeri;
+use App\Models\Galery;
 
-class GaleriController extends Controller
+class GaleryController extends Controller
 {
     public function index()
     {
-        $galeries = Galeri::latest()->paginate(6);
+        $galeries = Galery::latest()->paginate(6);
 
         return view('galery.index', compact('galeries'));
     }

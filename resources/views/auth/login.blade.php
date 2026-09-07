@@ -8,7 +8,7 @@
     </div>
 @endif
 
-    <form method="POST" action="{{ route('admin.login.submit') }}">
+    <form method="POST" action="{{ url('/logint') }}">
         @csrf
 
         <!-- Email Address -->

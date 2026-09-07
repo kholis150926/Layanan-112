@@ -7,7 +7,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PetaLayananController;
 use App\Http\Controllers\KritikSaranController;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\GaleryController;
 
 // Import Controller Admin
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
@@ -24,14 +24,9 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 |--------------------------------------------------------------------------
 */
 
-// Beranda (Mengambil data berita terbaru melalui BeritaController)
+// Beranda & Dashboard Utama (Mengambil data berita terbaru melalui BeritaController)
 Route::get('/', [BeritaController::class, 'beranda'])->name('beranda');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-Route::get('/', fn () => view('dashboard'))->name('beranda');
-Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+Route::get('/dashboard', [BeritaController::class, 'beranda'])->name('dashboard');
 
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 
@@ -48,7 +43,7 @@ Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('krit
 Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
 
 // Galery Public (Menggunakan GaleriController)
-Route::get('/galery', [GaleriController::class, 'index'])->name('galery');
+Route::get('/galery', [GaleryController::class, 'index'])->name('galery');
 
 // Peta Kutai Timur
 Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
@@ -68,11 +63,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Auth
-Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
-require __DIR__.'/auth.php';
-
+// require __DIR__.'/auth.php';
+Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------

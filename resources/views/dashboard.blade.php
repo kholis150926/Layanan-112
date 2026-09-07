@@ -432,18 +432,10 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const statusColor = {
-            launching:  '#2e9e4f',
-            uji_coba:   '#f59e0b',
-            verifikasi: '#3b82f6',
-            pengajuan:  '#5bc0c0',
-            belum:      '#9ca3af',
+            
         };
         const statusLabel = {
-            launching: 'Sudah Launching',
-            uji_coba: 'Uji Coba',
-            verifikasi: 'Verifikasi',
-            pengajuan: 'Dalam Pengajuan',
-            belum: 'Belum Permohonan',
+            
         };
 
         const dashMap = L.map('dashboardMap', {

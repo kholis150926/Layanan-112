@@ -8,7 +8,7 @@
     <h2 class="fw-bold text-navy mb-0">Dashboard</h2>
     <p class="text-muted mb-4">Ringkasan aktivitas layanan 112 Kutai Timur</p>
 
-    {{-- STAT CARDS (4 KARTU BARU) --}}
+    {{-- STAT CARDS (4 KARTU) --}}
     <div class="row g-3 mb-4">
         {{-- Kartu 1: Total Kritik & Saran --}}
         <div class="col-6 col-lg-3">
@@ -37,12 +37,12 @@
             </div>
         </div>
 
-        {{-- Kartu 4: Total Galeri / Artikel --}}
+        {{-- Kartu 4: Total Laporan (SUDAH DISESUAIKAN) --}}
         <div class="col-6 col-lg-3">
             <div class="stat-card">
-                <div class="stat-icon bg-danger-soft text-danger"><i class="bi bi-images"></i></div>
-                <div class="stat-value text-danger">{{ $stats['total_galeri'] ?? 0 }}</div>
-                <div class="stat-label">Total Galeri</div>
+                <div class="stat-icon bg-danger-soft text-danger"><i class="bi bi-file-earmark-text-fill"></i></div>
+                <div class="stat-value text-danger">{{ $stats['total_laporan'] ?? 0 }}</div>
+                <div class="stat-label">Total Laporan</div>
             </div>
         </div>
     </div>
