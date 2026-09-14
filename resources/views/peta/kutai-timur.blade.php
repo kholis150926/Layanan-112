@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    fetch("{{ route('peta.kutai-timur.data') }}")
+    fetch("{{ asset('storage/geojson-raw/kaltim.geojson') }}")
         .then(res => res.json())
         .then(geojson => {
             const layer = L.geoJSON(geojson, {
