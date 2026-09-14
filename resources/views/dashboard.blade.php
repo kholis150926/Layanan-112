@@ -287,33 +287,40 @@
 
             <div class="col-lg-4">
                 <div class="panel-card">
-                    <h6 class="mb-3">Pilih Kecamatan</h6>
-                    <div class="search-locate">
-                        <div class="icon-circle"><i class="bi bi-geo-alt-fill"></i></div>
-                        <small>Klik wilayah pada peta untuk melihat informasi laporan</small>
+                    <h6 class="mb-3" id="panelTitle">Informasi Wilayah</h6>
+
+                    <!-- Tampilan Default (Muncul saat belum mengklik peta) -->
+                    <div id="defaultPanel">
+                        <div class="search-locate">
+                            <div class="icon-circle"><i class="bi bi-geo-alt-fill"></i></div>
+                            <small>Klik wilayah pada peta untuk melihat grafik laporan</small>
+                        </div>
+
+                        <div class="kec-list-title">Kecamatan Teratas</div>
+                        <div class="kec-list">
+                            @forelse($kecamatanTeratas as $index => $kec)
+                                <div class="kec-item">
+                                    <span class="d-flex align-items-center">
+                                        <span class="kec-rank rank-{{ $index + 1 }}">{{ $index + 1 }}</span>
+                                        {{ $kec->kecamatan }}
+                                    </span>
+                                    <span class="kec-count">{{ $kec->jumlah }}</span>
+                                </div>
+                            @empty
+                                <div class="text-muted small py-2">Belum ada data laporan per kecamatan.</div>
+                            @endforelse
+                        </div>
                     </div>
 
-                    <div class="kec-list-title">Kecamatan Teratas</div>
-                    <div class="kec-list">
-                        @php
-                            $kecamatanTeratas = $kecamatanTeratas ?? [
-                                ['nama' => 'Sangatta Utara', 'jumlah' => 58, 'rank' => 1],
-                                ['nama' => 'Sangatta Selatan', 'jumlah' => 45, 'rank' => 2],
-                                ['nama' => 'Kaliorang', 'jumlah' => 26, 'rank' => 3],
-                                ['nama' => 'Bengalon', 'jumlah' => 21, 'rank' => 4],
-                                ['nama' => 'Kaubun', 'jumlah' => 21, 'rank' => 5],
-                            ];
-                        @endphp
-
-                        @foreach($kecamatanTeratas as $kec)
-                            <div class="kec-item">
-                                <span class="d-flex align-items-center">
-                                    <span class="kec-rank rank-{{ $kec['rank'] }}">{{ $kec['rank'] }}</span>
-                                    {{ $kec['nama'] }}
-                                </span>
-                                <span class="kec-count">{{ $kec['jumlah'] }}</span>
-                            </div>
-                        @endforeach
+                    <!-- Tampilan Grafik (Muncul setelah peta diklik) -->
+                    <div id="detailPanel" style="display: none;">
+                        <button id="btnResetMap" class="btn btn-sm btn-outline-secondary mb-3 w-100">
+                            <i class="bi bi-arrow-left"></i> Kembali ke Statistik Umum
+                        </button>
+                        <div style="position: relative; height: 220px;">
+                            <canvas id="chartKecamatan"></canvas>
+                        </div>
+                        <div id="infoLaporanKecamatan" class="mt-3 text-center small text-muted"></div>
                     </div>
                 </div>
             </div>
@@ -380,7 +387,7 @@
                         <li><a href="{{ route('berita.index') }}">Berita</a></li>
                         <li><a href="{{ route('laporan.index') }}">Tentang</a></li>
                         <li><a href="{{ route('galery') }}">Galeri</a></li>
-                        <a href="{{ route('kritik-saran') }}">Kritik & Saran</a>
+                        <li><a href="{{ route('kritik-saran') }}">Kritik & Saran</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3">
@@ -429,44 +436,103 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const statusColor = {
-            
-        };
-        const statusLabel = {
-            
-        };
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. Inisialisasi Peta
+        const dashMap = L.map('dashboardMap').setView([-0.5, 117.5], 8);
 
-        const dashMap = L.map('dashboardMap', {
-            zoomControl: false,
-            attributionControl: false,
-        }).setView([1.35, 117.4], 8);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(dashMap);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(dashMap);
+        let chartInstance = null;
 
-        fetch("{{ route('peta.kutai-timur.data') }}")
-            .then(res => res.json())
-            .then(geojson => {
-                const layer = L.geoJSON(geojson, {
-                    style: f => ({
-                        fillColor: statusColor[f.properties.status] || '#ccc',
-                        fillOpacity: 0.8,
-                        color: '#fff',
-                        weight: 1,
-                    }),
-                    onEachFeature: (feature, lyr) => {
-                        lyr.bindPopup(`<b>${feature.properties.kecamatan}</b><br>Status: ${statusLabel[feature.properties.status]}`);
+        // 2. Element DOM Panel
+        const defaultPanel = document.getElementById('defaultPanel');
+        const detailPanel = document.getElementById('detailPanel');
+        const panelTitle = document.getElementById('panelTitle');
+        const infoLaporan = document.getElementById('infoLaporanKecamatan');
+        const btnResetMap = document.getElementById('btnResetMap');
+
+        // 3. Fungsi Menampilkan Grafik Kecamatan
+        function tampilkanGrafikKecamatan(namaKec, stats) {
+            panelTitle.innerText = 'Statistik: ' + namaKec;
+            defaultPanel.style.display = 'none';
+            detailPanel.style.display = 'block';
+
+            const labels = Object.keys(stats);
+            const values = Object.values(stats);
+            const totalLaporan = values.reduce((a, b) => a + b, 0);
+
+            infoLaporan.innerText = 'Total Laporan: ' + totalLaporan + ' Kejadian';
+
+            // Destroy chart lama jika ada
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Buat Chart Baru
+            const ctx = document.getElementById('chartKecamatan').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels.length ? labels : ['Belum Ada Data'],
+                    datasets: [{
+                        data: values.length ? values : [1],
+                        backgroundColor: ['#2f6fed', '#e53935', '#f59e0b', '#10b981', '#8b5cf6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
                     }
-                }).addTo(dashMap);
-
-                dashMap.fitBounds(layer.getBounds());
-
-                document.getElementById('dashboardMapLegend').innerHTML =
-                    Object.keys(statusLabel).map(k =>
-                        `<span><i class="legend-dot" style="background:${statusColor[k]}"></i>${statusLabel[k]}</span>`
-                    ).join('');
+                }
             });
+        }
+
+        // 4. Tombol Kembali / Reset
+        btnResetMap.addEventListener('click', function () {
+            panelTitle.innerText = 'Informasi Wilayah';
+            detailPanel.style.display = 'none';
+            defaultPanel.style.display = 'block';
+        });
+
+        // 5. Fetch Data GeoJSON
+        fetch("{{ route('peta.kutai-timur.data') }}")
+        .then(res => res.json())
+        .then(data => {
+            let layer = L.geoJSON(data, {
+            style: function(feature) {
+                return {
+                color: '#3b82f6',
+                weight: 2,
+                fillColor: '#93c5fd',
+                fillOpacity: 0.5
+                };
+            },
+            onEachFeature: function(feature, lyr) {
+                const namaKec = feature.properties.kecamatan || feature.properties.NAMOBJ || 'Kecamatan';
+                lyr.bindTooltip(namaKec, { permanent: false, direction: 'center' });
+
+                lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.8 }); });
+                lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.5 }); });
+
+                lyr.on('click', function() {
+                const stats = feature.properties.statistik || {};
+                tampilkanGrafikKecamatan(namaKec, stats);
+                });
+            }
+            }).addTo(dashMap);
+
+            if (layer.getBounds().isValid()) {
+            dashMap.fitBounds(layer.getBounds());
+            }
+        })
+        .catch(err => console.error("Gagal memuat peta beranda:", err));
     });
     </script>
     </body>

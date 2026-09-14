@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Layanan112;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -53,5 +55,79 @@ class DashboardController extends Controller
             'kecamatanTeratas',
             'beritaList'
         ));
+    }
+
+    // --- METHOD UNTUK AMBIL DATA GEOJSON PETA BERANDA ---
+    public function petaData()
+    {
+        $path = storage_path('geojson-raw/kaltim.geojson');
+
+        if (!file_exists($path)) {
+            $path = storage_path('app/public/geojson-raw/kaltim.geojson');
+        }
+
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'File GeoJSON tidak ditemukan'], 404);
+        }
+
+        $content = file_get_contents($path);
+        $geojson = json_decode($content, true);
+
+        if (!$geojson || !isset($geojson['features'])) {
+            return response()->json(['error' => 'Format file GeoJSON tidak valid'], 500);
+        }
+
+        // Filter khusus Kutai Timur
+        $kutaiTimurFeatures = array_filter($geojson['features'], function ($feature) {
+            $props = $feature['properties'] ?? [];
+            $kabupaten = $props['kabupaten'] 
+                      ?? $props['KABUPATEN'] 
+                      ?? $props['WADMKK'] 
+                      ?? $props['KAB_KOTA'] 
+                      ?? '';
+
+            return stripos($kabupaten, 'Kutai Timur') !== false;
+        });
+
+        // Ambil data statistik dari database (jika model Layanan112 ada)
+        $laporanData = [];
+        if (class_exists('App\Models\Layanan112')) {
+            $laporanData = Layanan112::query()
+                ->select('kecamatan', 'jenis_laporan', DB::raw('count(*) as total'))
+                ->groupBy('kecamatan', 'jenis_laporan')
+                ->get()
+                ->groupBy('kecamatan');
+        }
+
+        $filteredFeatures = [];
+        foreach ($kutaiTimurFeatures as $feature) {
+            $props = $feature['properties'] ?? [];
+
+            $namaKec = $props['kecamatan'] 
+                    ?? $props['KECAMATAN'] 
+                    ?? $props['WADMKC'] 
+                    ?? $props['NAMOBJ'] 
+                    ?? null;
+
+            $feature['properties']['kecamatan'] = $namaKec;
+            $feature['properties']['kode_kec'] = $props['kode_kec'] ?? $props['KODE_KEC'] ?? $namaKec;
+
+            if ($namaKec && isset($laporanData[$namaKec])) {
+                $stats = [];
+                foreach ($laporanData[$namaKec] as $item) {
+                    $stats[$item->jenis_laporan] = $item->total;
+                }
+                $feature['properties']['statistik'] = $stats;
+            } else {
+                $feature['properties']['statistik'] = (object)[];
+            }
+
+            $filteredFeatures[] = $feature;
+        }
+
+        return response()->json([
+            'type' => 'FeatureCollection',
+            'features' => array_values($filteredFeatures)
+        ]);
     }
 }

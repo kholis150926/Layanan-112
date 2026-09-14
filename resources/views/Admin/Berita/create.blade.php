@@ -7,7 +7,7 @@
     <div class="card border-0 shadow-sm rounded-4 p-4">
         <h4 class="fw-bold text-navy mb-4">Tambah Berita Baru</h4>
 
-        <form action="{{ route('admin.berita.store') }}" method="POST">
+        <form action="{{ route('admin.berita.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -16,7 +16,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="form-label text-muted small fw-semibold">Kategori</label>
                     <select name="kategori" class="form-select rounded-3" required>
                         <option value="Pengumuman">Pengumuman</option>
@@ -25,9 +25,24 @@
                         <option value="Edukasi">Edukasi</option>
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small fw-semibold">URL Gambar</label>
-                    <input type="url" name="gambar_url" class="form-control rounded-3" placeholder="https://...">
+
+                <!-- Input Pilihan Gambar (File / Link) -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small fw-semibold">Gambar Berita</label>
+                    <div class="input-group">
+                        <select id="pilihanGambar" class="form-select rounded-start-3" style="max-width: 100px;" onchange="toggleGambarInput()">
+                            <option value="file">File</option>
+                            <option value="link">Link</option>
+                        </select>
+                        <input type="file" name="gambar_file" id="inputGambarFile" class="form-control rounded-end-3" accept="image/*">
+                        <input type="url" name="gambar_url" id="inputGambarUrl" class="form-control rounded-end-3 d-none" placeholder="https://...">
+                    </div>
+                </div>
+
+                <!-- Input Tanggal Upload -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small fw-semibold">Tanggal Upload</label>
+                    <input type="date" name="created_at" class="form-control rounded-3" value="{{ now()->format('Y-m-d') }}">
                 </div>
             </div>
 
@@ -48,4 +63,22 @@
         </form>
     </div>
 </div>
+
+<script>
+    function toggleGambarInput() {
+        const tipe = document.getElementById('pilihanGambar').value;
+        const inputFile = document.getElementById('inputGambarFile');
+        const inputUrl = document.getElementById('inputGambarUrl');
+
+        if (tipe === 'file') {
+            inputFile.classList.remove('d-none');
+            inputUrl.classList.add('d-none');
+            inputUrl.value = '';
+        } else {
+            inputUrl.classList.remove('d-none');
+            inputFile.classList.add('d-none');
+            inputFile.value = '';
+        }
+    }
+</script>
 @endsection

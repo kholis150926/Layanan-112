@@ -125,11 +125,12 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="page-title">Berita</div>
+<div class="container py-4">
+    
 
     <!-- ===== Header + Filter ===== -->
-    <div class="berita-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <!-- Menggunakan mt-4 atau mt-5 untuk memberi jarak dari navbar atas -->
+    <div class="berita-header mt-4 d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <h4 class="mb-0">Berita & Informasi</h4>
         <div class="d-flex gap-2 flex-wrap">
             @php
@@ -138,7 +139,7 @@
             @endphp
             @foreach($filters as $filter)
                 <a href="{{ route('berita.index', $filter === 'Semua' ? [] : ['kategori' => $filter]) }}"
-                   class="filter-pill {{ $filterAktif === $filter ? 'active' : '' }}">
+                class="filter-pill {{ $filterAktif === $filter ? 'active' : '' }}">
                     {{ $filter }}
                 </a>
             @endforeach

@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 |--------------------------------------------------------------------------
 */
 
-// Beranda & Dashboard Utama (Mengambil data berita terbaru melalui BeritaController)
+// Beranda & Dashboard Utama
 Route::get('/', [BeritaController::class, 'beranda'])->name('beranda');
 Route::get('/dashboard', [BeritaController::class, 'beranda'])->name('dashboard');
 
@@ -42,7 +42,7 @@ Route::get('/laporan/buat', fn () => view('laporan.create'))->name('laporan.crea
 Route::get('/kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran');
 Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kritik-saran.store');
 
-// Galery Public (Menggunakan GaleriController)
+// Galery Public
 Route::get('/galery', [GaleryController::class, 'index'])->name('galery');
 
 // Peta Kutai Timur
@@ -62,11 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfilController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Auth
-Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+// Admin Auth (Sudah ditambahkan ->name('login') agar tidak melemparRouteNotFoundException)
+Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login')->name('admin.login');
 Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-
-// require __DIR__.'/auth.php';
 Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 /*

@@ -13,7 +13,7 @@ class AdminAuthController extends Controller
         return view('auth.admin-login');
     }
 
-        public function login(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'username' => 'required|string',
@@ -36,5 +36,16 @@ class AdminAuthController extends Controller
         return back()->withErrors([
             'username' => 'Username atau password salah.',
         ])->onlyInput('username');
+    }
+
+    // Tambahkan method logout di bawah ini:
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/'); // Mengarahkan kembali ke halaman utama/pengguna
     }
 }

@@ -3,17 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\Laporan; // Kita tambahkan Model Laporan
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BeritaController extends Controller
 {
-    // Tambahkan method ini khusus untuk Halaman Beranda
+    // Method untuk Halaman Beranda
     public function beranda()
     {
-        // Ambil 3 berita paling baru dari database
+        // 1. Ambil 3 berita paling baru
         $beritaTerbaru = Berita::latest()->take(3)->get();
 
-        return view('dashboard', compact('beritaTerbaru'));
+        // 2. Ambil 5 kecamatan dengan laporan terbanyak dari database
+        $kecamatanTeratas = Laporan::select('kecamatan', DB::raw('count(*) as jumlah'))
+            ->groupBy('kecamatan')
+            ->orderByDesc('jumlah')
+            ->take(5)
+            ->get();
+
+        // Kirim data berita & kecamatan ke view dashboard
+        return view('dashboard', compact('beritaTerbaru', 'kecamatanTeratas'));
     }
 
     public function index(Request $request)

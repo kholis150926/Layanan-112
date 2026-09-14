@@ -155,14 +155,11 @@
 </nav>
 
 <div class="container">
-    <div class="page-title">Galeri</div>
-
     <!-- ===== Header ===== -->
-    <div class="ks-header">
-        <h2>Galeri Kegiatan</h2>
-        <p>Dokumentasi kegiatan dan operasi layanan 112 Kutai Timur.</p>
+    <div class="ks-header mt-4 mb-4">
+    <h2 class="fw-bold text-dark mb-1">Galeri Kegiatan</h2>
+    <p class="text-muted">Dokumentasi kegiatan dan operasi layanan 112 Kutai Timur.</p>
     </div>
-
     <!-- ===== Content Galeri ===== -->
     <div class="row g-4 mb-5">
         @forelse ($galeries as $galeri)
@@ -189,7 +186,6 @@
             </div>
         @endforelse
     </div>
-
     <!-- ===== Pagination ===== -->
     @if (isset($galeries) && $galeries instanceof \Illuminate\Pagination\AbstractPaginator)
         <div class="mt-4 d-flex justify-content-center">

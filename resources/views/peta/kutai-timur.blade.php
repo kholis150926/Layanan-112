@@ -37,9 +37,6 @@
         .navbar-saat .nav-link.active { color: var(--brand-blue); font-weight: 600; }
 
         #map { height: 620px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-        .legend-box { background: #fff; padding: 12px 16px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.2); font-size: .85rem; }
-        .legend-box div { margin-bottom: 4px; }
-        .legend-dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px; }
         .page-title { font-weight: 700; font-size: 1.3rem; color: #111827; }
     </style>
 </head>
@@ -62,7 +59,7 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('beranda') ? 'active' : '' }}" href="{{ route('beranda') }}">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">Profil</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('berita.index') ? 'active' : '' }}" href="{{ route('berita.index') }}">Berita</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('laporanindex') ? 'active' : '' }}" href="{{ route('laporan.index') }}">Laporan</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('laporan.index') ? 'active' : '' }}" href="{{ route('laporan.index') }}">Laporan</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('galeri') ? 'active' : '' }}" href="{{ route('galeri') }}">Galeri</a></li>
                 <li class="nav-item"><a class="nav-link active" href="{{ route('peta.kutai-timur') }}">Peta Layanan</a></li>
             </ul>
@@ -72,7 +69,7 @@
 
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <div class="page-title">Peta Penyelenggaraan Layanan 112 — Kabupaten Kutai Timur</div>
+        <div class="page-title">Peta Wilayah Kabupaten Kutai Timur</div>
         <select id="cariKecamatan" class="form-select w-auto">
             <option value="">Cari Kecamatan</option>
         </select>
@@ -97,16 +94,17 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(res => res.json())
         .then(geojson => {
             const layer = L.geoJSON(geojson, {
-                style: f => ({
-                    fillColor: statusColor[f.properties.status] || '#ccc',
-                    fillOpacity: 0.75,
-                    color: '#fff',
+                style: {
+                    fillColor: '#2f6fed',
+                    fillOpacity: 0.35,
+                    color: '#1e3a8a',
                     weight: 1.5,
-                }),
+                },
                 onEachFeature: (feature, lyr) => {
-                    lyr.bindPopup(`<b>${feature.properties.kecamatan}</b><br>Status: ${statusLabel[feature.properties.status]}`);
-                    lyr.on('mouseover', () => lyr.setStyle({ weight: 3 }));
-                    lyr.on('mouseout',  () => lyr.setStyle({ weight: 1.5 }));
+                    lyr.bindPopup(`<b>${feature.properties.kecamatan}</b>`);
+                    
+                    lyr.on('mouseover', () => lyr.setStyle({ fillOpacity: 0.65, weight: 2.5 }));
+                    lyr.on('mouseout',  () => lyr.setStyle({ fillOpacity: 0.35, weight: 1.5 }));
 
                     const opt = document.createElement('option');
                     opt.value = feature.properties.kode_kec;
@@ -125,17 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             });
-
-            const legend = L.control({ position: 'bottomleft' });
-            legend.onAdd = function () {
-                const div = L.DomUtil.create('div', 'legend-box');
-                div.innerHTML = Object.keys(statusLabel).map(k =>
-                    `<div><span class="legend-dot" style="background:${statusColor[k]}"></span>${statusLabel[k]}</div>`
-                ).join('');
-                return div;
-            };
-            legend.addTo(map);
-        });
+        })
+        .catch(err => console.error("Gagal memuat peta GeoJSON:", err));
 });
 </script>
 </body>
