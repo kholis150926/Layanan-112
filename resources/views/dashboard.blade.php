@@ -502,7 +502,7 @@
         });
 
         // 5. Fetch Data GeoJSON
-        fetch("{{ route('peta.kutai-timur.data') }}")
+        fetch("{{ asset('geojson/kaltim.geojson') }}")
         .then(res => res.json())
         .then(data => {
             let layer = L.geoJSON(data, {
