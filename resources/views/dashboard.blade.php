@@ -332,34 +332,33 @@
             <a href="{{ route('berita.index') }}" class="lihat-semua">Lihat semua &rarr;</a>
         </div>
 
-        <div class="row g-4 mb-4">
+        <div class="row">
             @forelse($beritaTerbaru as $berita)
-                <div class="col-md-4">
-                    <div class="card news-card">
-                        <img src="{{ $berita->gambar_url }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 180px; object-fit: cover;">
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <!-- Gambar Berita -->
+                        <img src="{{ filter_var($berita->gambar_url, FILTER_VALIDATE_URL) ? $berita->gambar_url : asset('storage/' . $berita->gambar_url) }}" 
+                        class="card-img-top rounded-top-3" 
+                        alt="{{ $berita->judul }}"
+                        style="aspect-ratio: 16/9; object-fit: cover; width: 100%;">
+                        
                         <div class="card-body">
-                            <!-- Badge Kategori Dynamic -->
-                            <span class="news-badge {{ strtolower($berita->kategori) }}">
-                                {{ $berita->kategori }}
-                            </span>
-                            
-                            <h6 class="mt-2 text-truncate">{{ $berita->judul }}</h6>
-                            <p class="mb-2 text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                {{ $berita->ringkasan }}
+                            <h5 class="card-title">{{ $berita->judul }}</h5>
+                            <p class="card-text text-muted">
+                                <small>{{ $berita->created_at->format('d M Y') }}</small>
                             </p>
-                            
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="news-date">
-                                    {{ \Carbon\Carbon::parse($berita->created_at)->format('d M Y') }}
-                                </span>
-                                <a href="{{ route('berita.show', $berita->slug) }}" class="text-primary fw-bold small">Baca &rarr;</a>
-                            </div>
+                            <p class="card-text">
+                                {{ Str::limit(strip_tags($berita->isi), 100) }}
+                            </p>
+                            <a href="{{ route('berita.show', $berita->slug ?? $berita->id) }}" class="btn btn-primary btn-sm">
+                                Baca Selengkapnya
+                            </a>
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="col-12 text-center py-4 text-muted">
-                    <p class="mb-0">Belum ada berita terbaru saat ini.</p>
+                <div class="col-12 text-center text-muted">
+                    <p>Belum ada berita terbaru.</p>
                 </div>
             @endforelse
         </div>
@@ -438,102 +437,113 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // 1. Inisialisasi Peta
-        const dashMap = L.map('dashboardMap').setView([-0.5, 117.5], 8);
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Inisialisasi Peta
+    const dashMap = L.map('dashboardMap').setView([-0.5, 117.5], 8);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap'
-        }).addTo(dashMap);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(dashMap);
 
-        let chartInstance = null;
+    let chartInstance = null;
 
-        // 2. Element DOM Panel
-        const defaultPanel = document.getElementById('defaultPanel');
-        const detailPanel = document.getElementById('detailPanel');
-        const panelTitle = document.getElementById('panelTitle');
-        const infoLaporan = document.getElementById('infoLaporanKecamatan');
-        const btnResetMap = document.getElementById('btnResetMap');
+    // 2. Element DOM Panel
+    const defaultPanel = document.getElementById('defaultPanel');
+    const detailPanel = document.getElementById('detailPanel');
+    const panelTitle = document.getElementById('panelTitle');
+    const infoLaporan = document.getElementById('infoLaporanKecamatan');
+    const btnResetMap = document.getElementById('btnResetMap');
 
-        // 3. Fungsi Menampilkan Grafik Kecamatan
-        function tampilkanGrafikKecamatan(namaKec, stats) {
-            panelTitle.innerText = 'Statistik: ' + namaKec;
-            defaultPanel.style.display = 'none';
-            detailPanel.style.display = 'block';
+    // 3. Fungsi Menampilkan Grafik Kecamatan
+    function tampilkanGrafikKecamatan(namaKec, stats) {
+        panelTitle.innerText = 'Statistik: ' + namaKec;
+        defaultPanel.style.display = 'none';
+        detailPanel.style.display = 'block';
 
-            const labels = Object.keys(stats);
-            const values = Object.values(stats);
-            const totalLaporan = values.reduce((a, b) => a + b, 0);
+        const labels = Object.keys(stats || {});
+        const values = Object.values(stats || {});
+        const totalLaporan = values.reduce((a, b) => a + b, 0);
 
-            infoLaporan.innerText = 'Total Laporan: ' + totalLaporan + ' Kejadian';
+        infoLaporan.innerText = 'Total Laporan: ' + totalLaporan + ' Kejadian';
 
-            // Destroy chart lama jika ada
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            // Buat Chart Baru
-            const ctx = document.getElementById('chartKecamatan').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels.length ? labels : ['Belum Ada Data'],
-                    datasets: [{
-                        data: values.length ? values : [1],
-                        backgroundColor: ['#2f6fed', '#e53935', '#f59e0b', '#10b981', '#8b5cf6']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
+        // Hapus chart lama jika ada
+        if (chartInstance) {
+            chartInstance.destroy();
         }
 
-        // 4. Tombol Kembali / Reset
-        btnResetMap.addEventListener('click', function () {
-            panelTitle.innerText = 'Informasi Wilayah';
-            detailPanel.style.display = 'none';
-            defaultPanel.style.display = 'block';
-        });
-
-        // 5. Fetch Data GeoJSON
-        fetch("{{ asset('geojson/kaltim.geojson') }}")
-        .then(res => res.json())
-        .then(data => {
-            let layer = L.geoJSON(data, {
-            style: function(feature) {
-                return {
-                color: '#3b82f6',
-                weight: 2,
-                fillColor: '#93c5fd',
-                fillOpacity: 0.5
-                };
+        // Buat Chart Baru
+        const ctx = document.getElementById('chartKecamatan').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels.length ? labels : ['Belum Ada Laporan'],
+                datasets: [{
+                    data: values.length ? values : [1],
+                    backgroundColor: values.length 
+                        ? ['#2f6fed', '#e53935', '#f59e0b', '#10b981', '#8b5cf6'] 
+                        : ['#e5e7eb']
+                }]
             },
-            onEachFeature: function(feature, lyr) {
-                const namaKec = feature.properties.kecamatan || feature.properties.NAMOBJ || 'Kecamatan';
-                lyr.bindTooltip(namaKec, { permanent: false, direction: 'center' });
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
 
-                lyr.on('mouseover', function() { this.setStyle({ fillOpacity: 0.8 }); });
-                lyr.on('mouseout', function() { this.setStyle({ fillOpacity: 0.5 }); });
+    // 4. Tombol Reset / Kembali
+    btnResetMap.addEventListener('click', function () {
+        panelTitle.innerText = 'Informasi Wilayah';
+        detailPanel.style.display = 'none';
+        defaultPanel.style.display = 'block';
+        dashMap.setView([-0.5, 117.5], 8);
+    });
 
-                lyr.on('click', function() {
-                const stats = feature.properties.statistik || {};
-                tampilkanGrafikKecamatan(namaKec, stats);
+    
+    fetch("{{ route('peta.data') }}")
+    .then(res => res.json())
+    .then(geojson => {
+
+        const layer = L.geoJSON(geojson, {
+            // TIDAK PERLU fungsi filter lagi di sini!
+            // Karena pemfilteran 'Kutai Timur' sudah dilakukan di PHP (DashboardController)
+            style: {
+                fillColor: '#2f6fed',
+                fillOpacity: 0.35,
+                color: '#1e3a8a',
+                weight: 1.5,
+            },
+            onEachFeature: (feature, lyr) => {
+                const namaKecamatan = feature.properties.kecamatan || 'Kecamatan';
+
+                lyr.bindPopup(`<b>${namaKecamatan}</b>`);
+                
+                lyr.on('mouseover', () => lyr.setStyle({ fillOpacity: 0.65, weight: 2.5 }));
+                lyr.on('mouseout',  () => lyr.setStyle({ fillOpacity: 0.35, weight: 1.5 }));
+
+                // Event Klik Wilayah
+                lyr.on('click', () => {
+                    // Focus kamera ke kecamatan yang diklik
+                    dashMap.fitBounds(lyr.getBounds());
+                    
+                    // 2. AMBIL DATA STATISTIK YANG SUDAH DISIAPKAN OLEH CONTROLLER
+                    const statsWilayah = feature.properties.statistik || {};
+                    tampilkanGrafikKecamatan(namaKecamatan, statsWilayah);
                 });
             }
-            }).addTo(dashMap);
+        }).addTo(dashMap);
 
-            if (layer.getBounds().isValid()) {
+        // Fit bounds awal ke area Kutai Timur
+        if (layer.getBounds().isValid()) {
             dashMap.fitBounds(layer.getBounds());
-            }
-        })
-        .catch(err => console.error("Gagal memuat peta beranda:", err));
-    });
-    </script>
+        }
+    })
+    .catch(err => console.error("Gagal memuat peta GeoJSON:", err));
+});
+</script>
     </body>
     </html>

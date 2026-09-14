@@ -90,10 +90,23 @@ document.addEventListener('DOMContentLoaded', function () {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    fetch("{{ asset('storage/geojson-raw/kaltim.geojson') }}")
+    // FIX PATH KE FOLDER PUBLIC GEOJSON
+    fetch("{{ asset('geojson/kaltim.geojson') }}")
         .then(res => res.json())
         .then(geojson => {
+
+            // Cek properti di F12 Console untuk kepastian
+            if (geojson.features && geojson.features.length > 0) {
+                console.log("Struktur data GeoJSON:", geojson.features[0].properties);
+            }
+
             const layer = L.geoJSON(geojson, {
+                // FILTER HANYA WILAYAH KUTAI TIMUR
+                filter: function(feature) {
+                    const props = feature.properties;
+                    const kab = (props.kabupaten || props.WADMKK || props.KABUPATEN || props.kab_kota || '').toString().toLowerCase();
+                    return kab.includes('kutai timur');
+                },
                 style: {
                     fillColor: '#2f6fed',
                     fillOpacity: 0.35,
@@ -101,23 +114,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     weight: 1.5,
                 },
                 onEachFeature: (feature, lyr) => {
-                    lyr.bindPopup(`<b>${feature.properties.kecamatan}</b>`);
+                    const props = feature.properties;
+                    const namaKecamatan = props.kecamatan || props.NAMOBJ || props.WADMKC || 'Kecamatan';
+                    const kodeKecamatan = props.kode_kec || props.KODEC || namaKecamatan;
+
+                    lyr.bindPopup(`<b>${namaKecamatan}</b>`);
                     
                     lyr.on('mouseover', () => lyr.setStyle({ fillOpacity: 0.65, weight: 2.5 }));
                     lyr.on('mouseout',  () => lyr.setStyle({ fillOpacity: 0.35, weight: 1.5 }));
 
                     const opt = document.createElement('option');
-                    opt.value = feature.properties.kode_kec;
-                    opt.textContent = feature.properties.kecamatan;
+                    opt.value = kodeKecamatan;
+                    opt.textContent = namaKecamatan;
                     document.getElementById('cariKecamatan').appendChild(opt);
                 }
             }).addTo(map);
 
-            map.fitBounds(layer.getBounds());
+            if (layer.getBounds().isValid()) {
+                map.fitBounds(layer.getBounds());
+            }
 
             document.getElementById('cariKecamatan').addEventListener('change', function (e) {
+                const val = e.target.value;
                 layer.eachLayer(l => {
-                    if (l.feature.properties.kode_kec === e.target.value) {
+                    const props = l.feature.properties;
+                    const matchVal = props.kode_kec || props.KODEC || props.kecamatan || props.NAMOBJ || props.WADMKC;
+                    if (matchVal === val) {
                         map.fitBounds(l.getBounds());
                         l.openPopup();
                     }

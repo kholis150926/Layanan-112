@@ -33,13 +33,14 @@ class BeritaController extends Controller
             'created_at'  => 'nullable|date',
         ]);
 
-        // Proses Logika Gambar (File Upload vs URL Link)
-        $gambarPath = 'https://via.placeholder.com/150';
+        // Logika Gambar (Simpan path relatif jika upload file)
+        $gambarPath = null;
 
         if ($request->hasFile('gambar_file')) {
-            $path = $request->file('gambar_file')->store('berita', 'public');
-            $gambarPath = asset('storage/' . $path);
+            // Hanya simpan path 'berita/namafile.jpg' ke DB
+            $gambarPath = $request->file('gambar_file')->store('berita', 'public');
         } elseif ($request->filled('gambar_url')) {
+            // Simpan link URL langsung jika diisi
             $gambarPath = $request->gambar_url;
         }
 
@@ -77,12 +78,15 @@ class BeritaController extends Controller
             'created_at'  => 'nullable|date',
         ]);
 
-        // Update Gambar jika ada yang baru
+        // Tetapkan gambar lama sebagai default jika tidak ada gambar baru
         $gambarPath = $berita->gambar_url;
 
         if ($request->hasFile('gambar_file')) {
-            $path = $request->file('gambar_file')->store('berita', 'public');
-            $gambarPath = asset('storage/' . $path);
+            // Hapus file fisik lama jika sebelumnya merupakan file upload (bukan link URL)
+            if ($berita->gambar_url && !filter_var($berita->gambar_url, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($berita->gambar_url);
+            }
+            $gambarPath = $request->file('gambar_file')->store('berita', 'public');
         } elseif ($request->filled('gambar_url')) {
             $gambarPath = $request->gambar_url;
         }
@@ -103,6 +107,12 @@ class BeritaController extends Controller
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
+        
+        // Hapus file fisik jika berupa file upload
+        if ($berita->gambar_url && !filter_var($berita->gambar_url, FILTER_VALIDATE_URL)) {
+            Storage::disk('public')->delete($berita->gambar_url);
+        }
+
         $berita->delete();
 
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus!');

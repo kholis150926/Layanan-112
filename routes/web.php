@@ -8,6 +8,7 @@ use App\Http\Controllers\PetaLayananController;
 use App\Http\Controllers\KritikSaranController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\GaleryController;
+use App\Http\Controllers\DashboardController; 
 
 // Import Controller Admin
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
@@ -25,8 +26,11 @@ use App\Http\Controllers\Admin\KritikSaranController as AdminKritikSaranControll
 */
 
 // Beranda & Dashboard Utama
-Route::get('/', [BeritaController::class, 'beranda'])->name('beranda');
-Route::get('/dashboard', [BeritaController::class, 'beranda'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('beranda');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// Route API Data GeoJSON Peta
+Route::get('/peta-data', [DashboardController::class, 'petaData'])->name('peta.data');
 
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 
@@ -45,10 +49,9 @@ Route::post('/kritik-saran', [KritikSaranController::class, 'store'])->name('kri
 // Galery Public
 Route::get('/galery', [GaleryController::class, 'index'])->name('galery');
 
-// Peta Kutai Timur
+// Peta Kutai Timur Halaman Publik
 Route::get('/peta/kutai-timur', [PetaLayananController::class, 'index'])->name('peta.kutai-timur');
 Route::get('/peta/kutai-timur/data', [PetaLayananController::class, 'dataJson'])->name('peta.kutai-timur.data');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfilController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Auth (Sudah ditambahkan ->name('login') agar tidak melemparRouteNotFoundException)
-Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login')->name('admin.login');
+Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
